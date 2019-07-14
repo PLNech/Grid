@@ -50,8 +50,8 @@ class Grid(object):
         return agent
 
     def is_valid_move(self, x, y):
-        return 0 < x < self.size and \
-               0 < y < self.size and \
+        return 0 < x < self.size - 1 and \
+               0 < y < self.size - 1 and \
                self.map[y][x] is not Cells.WALL
 
     @staticmethod
