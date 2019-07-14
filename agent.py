@@ -1,3 +1,4 @@
+import random
 from random import randint
 
 from world.cells import Cells
@@ -12,10 +13,10 @@ class Agent(object):
 
     def random_step(self):
         if randint(0, 1) == 0:  # Horizontal
-            new_x = randint(self.x - 1, self.x + 1)
+            new_x = self.x + random.choice([-1, 1])
             new_y = self.y
         else:
-            new_y = randint(self.y - 1, self.y + 1)
+            new_y = self.y + random.choice([-1, 1])
             new_x = self.x
         return new_x, new_y
 
