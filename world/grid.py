@@ -19,7 +19,6 @@ class Grid(object):
                 resources = len([x for x in lane if x is Cells.FOOD.value])
             self.map.append(lane)
             self.resources += resources
-        print("Generated map with %s resources." % self.resources)
 
     def __getitem__(self, item):
         return self.map[item]
