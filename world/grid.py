@@ -38,10 +38,8 @@ class Grid(object):
         return grid_str
 
     def move_agent(self, agent, x, y):
-        if self.is_invalid_move(x, y):
-            return
-
-        agent.x, agent.y = x, y
+        if self.is_valid_move(x, y):
+            agent.x, agent.y = x, y
 
     def add_agent(self, agent):
         y = randrange(1, self.size - 1)
@@ -51,10 +49,10 @@ class Grid(object):
         self.agents.append(agent)
         return agent
 
-    def is_invalid_move(self, x, y):
-        return x < 0 or x >= self.size or \
-                y < 0 or y >= self.size or \
-                self.map[y][x] is Cells.WALL
+    def is_valid_move(self, x, y):
+        return 0 < x < self.size and \
+               0 < y < self.size and \
+               self.map[y][x] is not Cells.WALL
 
     @staticmethod
     def init_lane(size=10):
