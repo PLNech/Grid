@@ -61,14 +61,18 @@ class Grid(object):
 
     @staticmethod
     def init_lane(size=10):
-        lane = [0]
+        lane = [Cells.WALL]
 
         for i in range(1, size - 1):
-            cell = randrange(1, len(Cells) - 1)  # TODO: Rarer food
+            d100 = randint(1, 100)
+            if d100 < 50:
+                cell = Cells.FOOD
+            else:
+                cell = Cells.EMPTY
             lane.append(cell)
-        lane.append(0)
+        lane.append(Cells.WALL)
 
-        return lane
+        return [cell.value for cell in lane]
 
     @staticmethod
     def init_wall(size=10):
