@@ -1,4 +1,4 @@
-from random import randrange
+from random import randrange, randint
 
 from world.cells import Cells
 
@@ -10,15 +10,19 @@ class Grid(object):
         self.resources = 0
         self.map = []
         self.agents = []
+        self.info = ""
 
         for i in range(size):
+            self.info += "\n[%s] " % i
             if i == 0 or i == size - 1:
-                lane, resources = self.init_wall(size), 0
+                lane, lane_food = self.init_wall(size), 0
+                self.info += "w"
             else:
                 lane = self.init_lane()
-                resources = len([x for x in lane if x is Cells.FOOD.value])
+                lane_food = len([x for x in lane if x is Cells.FOOD.value])
+                self.info += ", ".join([str(x) for x in lane])
             self.map.append(lane)
-            self.resources += resources
+            self.resources += lane_food
 
     def __getitem__(self, item):
         return self.map[item]
@@ -39,6 +43,8 @@ class Grid(object):
     def move_agent(self, agent, x, y):
         if self.is_valid_move(x, y):
             agent.x, agent.y = x, y
+            return True
+        return False
 
     def add_agent(self, agent):
         y = randrange(1, self.size - 1)

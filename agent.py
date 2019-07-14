@@ -21,17 +21,23 @@ class Agent(object):
         return new_x, new_y
 
     def act(self, grid):
+        info = "score:%s" % self.score
+
         # Act
         new_x, new_y = self.random_step()
-        grid.move_agent(self, new_x, new_y)
+        was_valid = grid.move_agent(self, new_x, new_y)
+        info += "|move(%s,%s)" % (self.x, self.y)
+        if not was_valid:
+            info += "|invalid"
 
         # Compute reward
         reward = 0
-        if grid[self.x][self.y] == Cells.FOOD.value:
+        if grid[self.y][self.x] == Cells.FOOD.value:
+            info += "|food"
             reward = 1
-            grid[self.x][self.y] = Cells.EMPTY.value
+            grid[self.y][self.x] = Cells.CRUMBS.value
             grid.resources -= 1
         self.score += reward
 
         # We're done if no more resources!
-        return reward, grid.resources == 0
+        return reward, grid.resources == 0, info

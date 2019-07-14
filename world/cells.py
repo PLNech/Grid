@@ -6,11 +6,13 @@ class Cells(Enum):
     EMPTY = 1
     FOOD = 2
     PLAYER = 3
+    CRUMBS = 4
 
     def __str__(self):
         return {
             self.WALL: "w",
             self.EMPTY: ".",
             self.FOOD: "X",
-            self.PLAYER: "P"
+            self.PLAYER: "P",
+            self.CRUMBS: ",",
         }[self]
