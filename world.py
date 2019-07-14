@@ -1,9 +1,5 @@
-from random import randrange
-
 from agent import Agent
-from world.cells import Cells
 from world.grid import Grid
-
 
 
 def run():
