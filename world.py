@@ -50,6 +50,7 @@ class Agent(object):
     def __init__(self):
         self.x = 0
         self.y = 0
+        self.score = 0
 
     def act(self, grid):
         if randint(0, 1) == 0:  # Horizontal
@@ -60,7 +61,10 @@ class Agent(object):
             new_x = self.x
 
         move_agent(self, grid, new_x, new_y)
-        print("New position: ", self.x, self.y)
+        # print("New position: ", self.x, self.y)
+        if grid[self.x][self.y] == CELLS["O"]:
+            self.score += 1
+            print("Food found! Score:", self.score)
         # find resource
         # go there
         return False
@@ -81,7 +85,6 @@ def invalid_move(x, y):
 
 def move_agent(agent, grid, x, y):
     if invalid_move(x, y):
-        print("Invalid!", x, ", ", y)
         return
     agent.x = x
     agent.y = y
@@ -96,7 +99,7 @@ def run():
 
     while not done:
         done = agent.act(grid)
-        print_world(grid, agent)
+        # print_world(grid, agent)
 
 
 if __name__ == "__main__":
