@@ -21,26 +21,26 @@ def run(stdscr):
     stdscr.getch()
 
     grid.add_agents(agents)
-    stdscr.addstr(str(grid))
 
     while not done:
         stdscr.clear()
         run_i += 1
+        stdscr.addstr("Run %s\n" % run_i)
         for a in agents:
-            a_str = "[%s]" % a.name
+            stdscr.addstr("\n[%s] " % a.name)
 
             reward, done, info = a.act(grid)
             a.reward(reward)
-        stdscr.addstr("%s Run %s: %s\n%s (%s,%s)"
-                      % (a_str, run_i, reward, grid, a.x, a.y))
-        if len(info):
-            stdscr.addstr("\n%s Info: %s" % (a_str, info))
+            stdscr.addstr("%s (%s,%s) |" % (reward, a.x, a.y))
+            if len(info):
+                stdscr.addstr("Info: %s" % info)
+        stdscr.addstr("\n\n%s" % grid)
         stdscr.getch()
 
     stdscr.addstr("Done!")
     for a in agents:
         stdscr.addstr("\n%s Got %s points in %s rounds."
-                  % (a.name, a.score, run_i))
+                      % (a.name, a.score, run_i))
     stdscr.getch()
 
 
