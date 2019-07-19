@@ -5,42 +5,46 @@ from curses import wrapper
 from agent import Agent
 from world.grid import Grid
 
+SIZE = 50
+
 
 def main(stdscr):
+    stdscr.timeout(50 if SIZE < 20 else 0)
     stdscr.clear()
     run(stdscr)
 
 
-def run(stdscr):
+def run(window):
     run_i = 0
     done = False
     agents = [Agent("A"), Agent("B")]
-    grid = Grid()
+    grid = Grid(SIZE)
     grid.add_agents(agents)
-    stdscr.addstr("Generated map with %s resources:\n\n%s"
+    window.addstr("Generated map with %s resources:\n\n%s"
                   % (grid.resources, grid))
-    stdscr.getch()
+    window.getch()
 
     while not done:
-        stdscr.clear()
+        window.clear()
         run_i += 1
-        stdscr.addstr("Run %s\n" % run_i)
+        window.addstr("Run %s\n" % run_i)
         for a in agents:
-            stdscr.addstr("\n[%s] " % a.name)
+            window.addstr("\n[%s] " % a.name)
 
             reward, done, info = a.act(grid)
             a.reward(reward)
-            stdscr.addstr("%s (%s,%s) |" % (reward, a.x, a.y))
+            window.addstr("%s (%s,%s) |" % (reward, a.x, a.y))
             if len(info):
-                stdscr.addstr("Info: %s" % info)
-        stdscr.addstr("\n\n%s" % grid)
-        stdscr.getch()
+                window.addstr("Info: %s" % info)
+        window.addstr("\n\n%s" % grid)
+        window.getch()
 
-    stdscr.addstr("Done!")
+    window.notimeout(True)
+    window.addstr("Done!")
     for a in agents:
-        stdscr.addstr("\n%s Got %s points in %s rounds."
+        window.addstr("\n%s Got %s points in %s rounds."
                       % (a.name, a.score, run_i))
-    stdscr.getch()
+    window.getch()
 
 
 if __name__ == "__main__":

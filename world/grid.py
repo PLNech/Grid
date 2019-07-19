@@ -15,7 +15,7 @@ class Grid(object):
             if i == 0 or i == size - 1:
                 lane, lane_food = self.init_wall(size), 0
             else:
-                lane = self.init_lane()
+                lane = self.init_lane(size)
                 lane_food = len([x for x in lane if x is Cells.FOOD.value])
             self.map.append(lane)
             self.resources += lane_food
