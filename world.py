@@ -5,7 +5,7 @@ from curses import wrapper
 from agent import Agent
 from world.grid import Grid
 
-SIZE = 40
+grid_size = 10
 
 
 def main(stdscr):
@@ -17,12 +17,12 @@ def run(window):
     run_i = 0
     done = False
     agents = [Agent(x) for x in "ABCDE"]
-    grid = Grid(SIZE)
+    grid = Grid(grid_size)
     grid.add_agents(agents)
-    window.addstr("Generated map with %s resources:\n\n%s"
-                  % (grid.resources, grid))
+    window.addstr("Generated map of size %s with %s resources:\n\n%s"
+                  % (grid_size, grid.resources, grid))
     window.getch()
-    window.timeout(50 if SIZE < 20 else 0)
+    window.timeout(50 if grid_size < 20 else 0)
 
     while not done:
         window.clear()
