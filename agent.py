@@ -6,7 +6,12 @@ from world.cells import Cells
 
 class Agent(object):
 
-    def __init__(self):
+    def __init__(self, name="P"):
+        """
+
+        :type name: str
+        """
+        self.name = name
         self.x = 0
         self.y = 0
         self.score = 0
@@ -37,7 +42,13 @@ class Agent(object):
             reward = 1
             grid[self.y][self.x] = Cells.CRUMBS.value
             grid.resources -= 1
-        self.score += reward
 
         # We're done if no more resources!
         return reward, grid.resources == 0, info
+
+    def reward(self, reward):
+        """
+
+        :type reward: int
+        """
+        self.score += reward

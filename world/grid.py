@@ -33,7 +33,7 @@ class Grid(object):
             for j, cell in enumerate(lane):
                 for agent in self.agents:
                     if i == agent.y and j == agent.x:
-                        cell_str = str(Cells.PLAYER)
+                        cell_str = agent.name
                     else:
                         cell_str = str(Cells(cell))
                     grid_str += cell_str
@@ -45,6 +45,10 @@ class Grid(object):
             agent.x, agent.y = x, y
             return True
         return False
+
+    def add_agents(self, agents):
+        for a in agents:
+            self.add_agent(a)
 
     def add_agent(self, agent):
         y = randrange(1, self.size - 1)
