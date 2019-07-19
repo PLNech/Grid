@@ -26,12 +26,12 @@ class Agent(object):
         return new_x, new_y
 
     def act(self, grid):
-        info = "score:%s" % self.score
+        info = "score:{:4}".format(self.score)
 
         # Act
         new_x, new_y = self.random_step()
         was_valid = grid.move_agent(self, new_x, new_y)
-        info += "|move(%s,%s)" % (self.x, self.y)
+        info += "|move(%s)" % self.position()
         if not was_valid:
             info += "|invalid"
 
@@ -52,3 +52,6 @@ class Agent(object):
         :type reward: int
         """
         self.score += reward
+
+    def position(self):
+        return "{:2},{:2}".format(self.x, self.y)

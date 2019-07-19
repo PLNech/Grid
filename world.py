@@ -9,7 +9,6 @@ SIZE = 40
 
 
 def main(stdscr):
-    stdscr.timeout(50 if SIZE < 20 else 0)
     stdscr.clear()
     run(stdscr)
 
@@ -23,6 +22,7 @@ def run(window):
     window.addstr("Generated map with %s resources:\n\n%s"
                   % (grid.resources, grid))
     window.getch()
+    window.timeout(50 if SIZE < 20 else 0)
 
     while not done:
         window.clear()
@@ -33,13 +33,13 @@ def run(window):
 
             reward, done, info = a.act(grid)
             a.reward(reward)
-            window.addstr("%s (%s,%s) |" % (reward, a.x, a.y))
+            window.addstr("%s |" % a.position())
             if len(info):
-                window.addstr("Info: %s" % info)
+                window.addstr(info)
         window.addstr("\n\n%s" % grid)
         window.getch()
 
-    window.notimeout(True)
+    window.timeout(10000)
     window.addstr("Done!")
     for a in agents:
         window.addstr("\n%s Got %s points in %s rounds."

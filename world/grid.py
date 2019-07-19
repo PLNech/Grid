@@ -13,9 +13,9 @@ class Grid(object):
 
         for i in range(size):
             if i == 0 or i == size - 1:
-                lane, lane_food = self.init_wall(size), 0
+                lane, lane_food = self.wall_lane(size), 0
             else:
-                lane = self.init_lane(size)
+                lane = self.random_lane(size)
                 lane_food = len([x for x in lane if x is Cells.FOOD.value])
             self.map.append(lane)
             self.resources += lane_food
@@ -60,8 +60,8 @@ class Grid(object):
                self.map[y][x] is not Cells.WALL
 
     @staticmethod
-    def init_lane(size=10):
-        lane = [Cells.WALL]
+    def random_lane(size=10):
+        lane = [Cells.WALL_H]
 
         for i in range(1, size - 1):
             d100 = randint(1, 100)
@@ -70,10 +70,10 @@ class Grid(object):
             else:
                 cell = Cells.EMPTY
             lane.append(cell)
-        lane.append(Cells.WALL)
+        lane.append(Cells.WALL_H)
 
         return [cell.value for cell in lane]
 
     @staticmethod
-    def init_wall(size=10):
-        return [0] * size
+    def wall_lane(size=10):
+        return [Cells.WALL] * size

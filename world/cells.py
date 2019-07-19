@@ -2,6 +2,7 @@ from enum import Enum
 
 
 class Cells(Enum):
+    WALL_H = -1
     WALL = 0
     EMPTY = 1
     FOOD = 2
@@ -9,10 +10,11 @@ class Cells(Enum):
     CRUMBS = 4
 
     def __str__(self):
+        key = self
         return {
-            self.WALL: "w",
-            self.EMPTY: ".",
-            self.FOOD: "X",
-            self.PLAYER: "P",
+            self.WALL_H: "|",
+            self.WALL: "-",
+            self.EMPTY: " ",
+            self.FOOD: "⋄",
             self.CRUMBS: ",",
-        }[self]
+        }[key]
