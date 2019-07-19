@@ -16,11 +16,10 @@ def run(stdscr):
     done = False
     agents = [Agent("A"), Agent("B")]
     grid = Grid()
-    stdscr.addstr("Generated map with %s resources:\n%s"
-                  % (grid.resources, grid.info))
-    stdscr.getch()
-
     grid.add_agents(agents)
+    stdscr.addstr("Generated map with %s resources:\n\n%s"
+                  % (grid.resources, grid))
+    stdscr.getch()
 
     while not done:
         stdscr.clear()

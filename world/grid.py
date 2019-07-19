@@ -10,17 +10,13 @@ class Grid(object):
         self.resources = 0
         self.map = []
         self.agents = []
-        self.info = ""
 
         for i in range(size):
-            self.info += "\n[%s] " % i
             if i == 0 or i == size - 1:
                 lane, lane_food = self.init_wall(size), 0
-                self.info += "w"
             else:
                 lane = self.init_lane()
                 lane_food = len([x for x in lane if x is Cells.FOOD.value])
-                self.info += ", ".join([str(x) for x in lane])
             self.map.append(lane)
             self.resources += lane_food
 
