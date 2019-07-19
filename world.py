@@ -5,7 +5,7 @@ from curses import wrapper
 from agent import Agent
 from world.grid import Grid
 
-grid_size = 10
+grid_size = 40
 
 
 def main(stdscr):
