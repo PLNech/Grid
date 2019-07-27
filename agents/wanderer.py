@@ -5,22 +5,58 @@ from world.cells import Cells
 
 
 class Wanderer(Agent):
+    # TODO DEBUG: Spot resources gone wrong :shrug:
     def __init__(self, name="W"):
         super().__init__(name)
         self.view = []
 
     def choose_move(self, grid):
-        move = self.x, self.y
-
         self.view = grid.map
+        resources, spot_info = self.spot_resources(grid)
+
+        min_distance, nearest = self.analyze_resources(resources)
+        if nearest[0] == -1:
+            move, choice_info = self._random_step()
+        else:
+            move, choice_info = self.move_towards(nearest)
+        return move, "{:5}|analyze: {}|min({})|see({})".format(choice_info, spot_info, min_distance, len(resources))
+
+    def analyze_resources(self, resources):
+        nearest = -1, -1
+        min_distance = INT16_MAX
+
+        if len(resources):
+            for r_x, r_y in resources:
+                distance = abs(self.x - r_x) + abs(self.y - r_y)
+                if distance < min_distance:
+                    min_distance = distance
+                    nearest = r_x, r_y
+        else:
+            min_distance = -1
+        return min_distance, nearest
+
+    def spot_resources(self, grid, sight=50):
+        """
+
+        :param sight: How far sideways the agent sees resources.
+
+        :type sight int
+        :type grid: Grid
+        """
         resources = []
-        for y in range(grid.size_y):
-            for x in range(grid.size_x):
+        min_visible_x = -1
+        max_visible_x = -1
+
+        # Y -> 0 <= self.y - sight TO self.y + sight <= grid.size_y
+        min_visible_y = max(0, self.y - sight)
+        max_visible_y = min(grid.size_y, self.y + sight)
+
+        for y in range(min_visible_y, max_visible_y):
+            # X -> 0 <= self.x - sight TO self.x + sight <= grid.size_x
+            min_visible_x = max(0, self.x - sight)
+            max_visible_x = min(self.x, self.x + sight)
+
+            for x in range(min_visible_x, max_visible_x):
                 if grid[y][x] == Cells.FOOD.value:
                     resources.append((x, y))
-        min_distance = INT16_MAX
-        for r_x, r_y in resources:
-            distance = abs(self.x - r_x) + abs(self.y - r_y)
-            if distance < min_distance:
-                move = r_x, r_y
-        return move, "min(%s)|[see %s]" % (min_distance, len(resources))
+        return resources, "spotted [{} {}]/[{} {}]".format(min_visible_x, max_visible_x, min_visible_y, max_visible_y)

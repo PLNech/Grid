@@ -1,4 +1,5 @@
 from abc import abstractmethod
+from random import randint, choice
 
 
 class Agent(object):
@@ -41,20 +42,45 @@ class Agent(object):
         :return: (reward, done, info) tuple.
         """
         info = "score:{:4}".format(self.score)
-        move, new_info = self.choose_move(grid)
+        move, choice_info = self.choose_move(grid)
+        info += "|{:25}".format(choice_info)
 
         was_valid = grid.move_agent(self, move)
-
-        info += "|move(%s)|%s" % (self.position, new_info)
         if not was_valid:
             info += "|invalid"
+        else:
+            info += "|move(%s)" % self.position
 
-        reward, new_info = grid.reward_move(move)
-        if new_info is None:
-            new_info = "BaseAgent"
-        info += new_info
+        reward, reward_info = grid.reward_move(move)
+        if reward_info is None:
+            reward_info = "BaseAgent"
 
-        return reward, grid.stats.resources == 0, info + new_info
+        return reward, grid.stats.resources == 0, info + reward_info
+
+    def move_towards(self, destination):
+        """
+        Moves the agent towards the given destination.
+
+        :param destination: a (x, y) destination to reach.
+        :return: the move coordinates and the verbose move taken.
+        """
+        d_x, d_y = destination
+        if self.x != d_x:
+            change = -1 if d_x - self.x < 0 else 1
+            info = "left" if change is -1 else "right"
+            return (self.x + change, self.y), info
+        else:
+            change = (-1 if d_y - self.y < 0 else 1)
+            info = "down" if change is -1 else "up"
+            return (self.x, self.y + change), info
+
+    def _random_step(self):
+        change = choice([-1, 1])
+        if randint(0, 1) == 0:  # Horizontal
+            destination = (self.x + change, self.y)
+        else:
+            destination = (self.x, self.y + change)
+        return self.move_towards(destination)
 
     @property
     def position(self):
