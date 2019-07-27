@@ -1,21 +1,7 @@
 from random import randrange, randint
 
 from world.cells import Cells
-
-
-class Stats(object):
-
-    def __init__(self, grid):
-        self.grid = grid
-
-    def __getattr__(self, item):
-        if item is "resources":
-            return sum([len([x for x in l if x is Cells.FOOD.value]) for l in self.grid.map])
-        elif item is "walls":
-            return sum(
-                [len([x for x in l if x is Cells.WALL_H or x is Cells.WALL]) for l in self.grid.map])
-        else:
-            return 0
+from world.stats import GridStats
 
 
 class Grid(object):
@@ -24,7 +10,7 @@ class Grid(object):
         self.size = size
         self.map = []
         self.agents = []
-        self.stats = Stats(self)
+        self.stats = GridStats(self)
 
         for i in range(size):
             if i == 0 or i == size - 1:
