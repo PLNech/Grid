@@ -19,7 +19,7 @@ class Wanderer(Agent):
             move, choice_info = self._random_step()
         else:
             move, choice_info = self.move_towards(nearest)
-        return move, "{:5}|analyze: {}|min({})|see({})".format(choice_info, spot_info, min_distance, len(resources))
+        return move, "{:5}|{}|{}|{}".format(choice_info, spot_info, min_distance is not INT16_MAX, len(resources))
 
     def analyze_resources(self, resources):
         nearest = -1, -1
@@ -32,10 +32,10 @@ class Wanderer(Agent):
                     min_distance = distance
                     nearest = r_x, r_y
         else:
-            min_distance = -1
+            min_distance = INT16_MAX
         return min_distance, nearest
 
-    def spot_resources(self, grid, sight=50):
+    def spot_resources(self, grid, sight=100):
         """
 
         :param sight: How far sideways the agent sees resources.
@@ -59,4 +59,4 @@ class Wanderer(Agent):
             for x in range(min_visible_x, max_visible_x):
                 if grid[y][x] == Cells.FOOD.value:
                     resources.append((x, y))
-        return resources, "spotted [{} {}]/[{} {}]".format(min_visible_x, max_visible_x, min_visible_y, max_visible_y)
+        return resources, "s[{} {}]/[{} {}]".format(min_visible_x, max_visible_x, min_visible_y, max_visible_y)
