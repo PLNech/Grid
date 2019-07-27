@@ -6,7 +6,6 @@ from world.cells import Cells
 
 class Wanderer(Agent):
 
-    # TODO DEBUG: Spot resources gone wrong :shrug:
     def __init__(self, name="W", sight=10):
         super().__init__(name)
         self.sight = sight

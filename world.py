@@ -3,9 +3,7 @@ from curses import wrapper
 from typing import List
 
 from agents.agent import Agent
-from agents.random import RandomWalker
 from agents.wanderer import Wanderer
-from agents.sniper import Sniper
 from world.grid import Grid
 
 grid_height = 40
@@ -13,20 +11,21 @@ grid_size = grid_height * 2, grid_height
 
 
 def main(stdscr):
-    stdscr.clear()
-    run(stdscr)
+    while True:
+        stdscr.clear()
+        run(stdscr)
+        stdscr.getch()
 
 
 def run(window):
     run_i = 0
     done = False
-    agents = [Wanderer(x, i) for (i, x) in enumerate("ABCDE")]  # type: List[Agent]
-    agents.append(Sniper())
-    agents.append(RandomWalker())
+    agents = [Wanderer(x, i * 2) for (i, x) in enumerate("ABCDE")]  # type: List[Agent]
     grid = Grid(grid_size)
     grid.add_agents(agents)
     window.addstr("Generated map of size %s with %s resources and %s walls:\n\n%s"
                   % (grid_size, grid.stats.resources, grid.stats.walls, grid))
+    window.timeout(5000)
     window.getch()
     window.timeout(50 if sum(grid_size) < 40 else 10)
 
@@ -46,7 +45,7 @@ def run(window):
         window.getch()
 
     window.timeout(10000)
-    window.addstr("Done in %i rounds!" % run_i)
+    window.addstr("\nDone in %i rounds!" % run_i)
     for agent in agents:
         window.addstr("\n%s got %s points."
                       % (agent.name, agent.score))
