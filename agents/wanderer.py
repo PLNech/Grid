@@ -5,11 +5,15 @@ from world.cells import Cells
 
 
 class Wanderer(Agent):
+    sight = ...  # type: int
 
     def __init__(self, name="W", sight=10):
         super().__init__(name)
         self.sight = sight
         self.view = []
+
+    def __str__(self):
+        return "[{}|{:02}]".format(self.name, self.sight)
 
     def choose_move(self, grid):
         self.view = grid.map
@@ -39,9 +43,6 @@ class Wanderer(Agent):
     def spot_resources(self, grid):
         """
 
-        :param sight: How far sideways the agent sees resources.
-
-        :type sight int
         :type grid: Grid
         """
         resources = []

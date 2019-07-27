@@ -20,7 +20,7 @@ def main(stdscr):
 def run(window):
     run_i = 0
     done = False
-    agents = [Wanderer(x, i * 2) for (i, x) in enumerate("ABCDE")]  # type: List[Agent]
+    agents = [Wanderer(x, i * 5) for (i, x) in enumerate("ABCDE", 1)]  # type: List[Agent]
     grid = Grid(grid_size)
     grid.add_agents(agents)
     window.addstr("Generated map of size %s with %s resources and %s walls:\n\n%s"
@@ -34,7 +34,7 @@ def run(window):
         run_i += 1
         window.addstr("Run %s\n" % run_i)
         for agent in agents:
-            window.addstr("\n[%s] " % agent.name)
+            window.addstr("\n[%s] " % agent)
 
             reward, done, info = agent.act(grid)
             agent.process_reward(reward)

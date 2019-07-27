@@ -18,6 +18,9 @@ class Agent(object):
         self.y = 0
         self.score = 0
 
+    def __str__(self):
+        return "[{}]".format(self.name)
+
     # region Agent-specific methods
     def process_reward(self, reward):
         """
