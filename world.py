@@ -26,7 +26,7 @@ def run(window):
     window.addstr("Generated map of size %s with %s resources and %s walls:\n\n%s"
                   % (grid_size, grid.stats.resources, grid.stats.walls, grid))
     window.getch()
-    window.timeout(500 if sum(grid_size) < 40 else 10)
+    window.timeout(50 if sum(grid_size) < 40 else 10)
 
     while not done:
         window.clear()
