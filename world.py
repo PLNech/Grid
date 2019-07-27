@@ -1,5 +1,4 @@
 #! /usr/bin/env python
-
 from curses import wrapper
 
 from agent import Agent
@@ -19,8 +18,8 @@ def run(window):
     agents = [Agent(x) for x in "ABCDE"]
     grid = Grid(grid_size)
     grid.add_agents(agents)
-    window.addstr("Generated map of size %s with %s resources:\n\n%s"
-                  % (grid_size, grid.resources, grid))
+    window.addstr("Generated map of size %s with %s resources and %s walls:\n\n%s"
+                  % (grid_size, grid.stats.resources, grid.stats.walls, grid))
     window.getch()
     window.timeout(50 if grid_size < 20 else 0)
 

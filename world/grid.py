@@ -3,22 +3,35 @@ from random import randrange, randint
 from world.cells import Cells
 
 
+class Stats(object):
+
+    def __init__(self, grid):
+        self.grid = grid
+
+    def __getattr__(self, item):
+        if item is "resources":
+            return sum([len([x for x in l if x is Cells.FOOD.value]) for l in self.grid.map])
+        elif item is "walls":
+            return sum(
+                [len([x for x in l if x is Cells.WALL_H or x is Cells.WALL]) for l in self.grid.map])
+        else:
+            return 0
+
+
 class Grid(object):
 
     def __init__(self, size=10):
         self.size = size
-        self.resources = 0
         self.map = []
         self.agents = []
+        self.stats = Stats(self)
 
         for i in range(size):
             if i == 0 or i == size - 1:
-                lane, lane_food = self.wall_lane(size), 0
+                lane = self.wall_lane(size)
             else:
                 lane = self.random_lane(size)
-                lane_food = len([x for x in lane if x is Cells.FOOD.value])
             self.map.append(lane)
-            self.resources += lane_food
 
     def __getitem__(self, item):
         return self.map[item]
@@ -27,12 +40,11 @@ class Grid(object):
         grid_str = ""
         for i, lane in enumerate(self.map):
             for j, cell in enumerate(lane):
+                cell_str = str(Cells(cell))
                 for agent in self.agents:
                     if i == agent.y and j == agent.x:
                         cell_str = agent.name
-                    else:
-                        cell_str = str(Cells(cell))
-                    grid_str += cell_str
+                grid_str += cell_str
             grid_str += "\n"
         return grid_str
 
@@ -65,7 +77,7 @@ class Grid(object):
 
         for i in range(1, size - 1):
             d100 = randint(1, 100)
-            if d100 < 50:
+            if d100 < 10:
                 cell = Cells.FOOD
             else:
                 cell = Cells.EMPTY

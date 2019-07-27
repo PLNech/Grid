@@ -41,10 +41,9 @@ class Agent(object):
             info += "|food"
             reward = 1
             grid[self.y][self.x] = Cells.CRUMBS.value
-            grid.resources -= 1
 
         # We're done if no more resources!
-        return reward, grid.resources == 0, info
+        return reward, grid.stats.resources == 0, info
 
     def reward(self, reward):
         """
