@@ -5,9 +5,11 @@ from world.cells import Cells
 
 
 class Wanderer(Agent):
+
     # TODO DEBUG: Spot resources gone wrong :shrug:
-    def __init__(self, name="W"):
+    def __init__(self, name="W", sight=10):
         super().__init__(name)
+        self.sight = sight
         self.view = []
 
     def choose_move(self, grid):
@@ -35,7 +37,7 @@ class Wanderer(Agent):
             min_distance = INT16_MAX
         return min_distance, nearest
 
-    def spot_resources(self, grid, sight=100):
+    def spot_resources(self, grid):
         """
 
         :param sight: How far sideways the agent sees resources.
@@ -47,14 +49,12 @@ class Wanderer(Agent):
         min_visible_x = -1
         max_visible_x = -1
 
-        # Y -> 0 <= self.y - sight TO self.y + sight <= grid.size_y
-        min_visible_y = max(0, self.y - sight)
-        max_visible_y = min(grid.size_y, self.y + sight)
+        min_visible_y = max(0, self.y - self.sight)
+        max_visible_y = min(self.y + self.sight, grid.size_y)
 
         for y in range(min_visible_y, max_visible_y):
-            # X -> 0 <= self.x - sight TO self.x + sight <= grid.size_x
-            min_visible_x = max(0, self.x - sight)
-            max_visible_x = min(self.x, self.x + sight)
+            min_visible_x = max(0, self.x - self.sight)
+            max_visible_x = min(self.x + self.sight, grid.size_x)
 
             for x in range(min_visible_x, max_visible_x):
                 if grid[y][x] == Cells.FOOD.value:
