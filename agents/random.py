@@ -21,4 +21,4 @@ class RandomAgent(Agent):
             change_y = self.y + random.choice([-1, 1])
             info = "down" if change_y is -1 else "up"
             change_x = self.x
-        return change_x, change_y, info
+        return (change_x, change_y), info

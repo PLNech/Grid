@@ -29,7 +29,7 @@ class Agent(object):
     @abstractmethod
     def choose_move(self, grid):
         info = ""
-        return self.x, self.y, info
+        return (self.x, self.y), info
 
     # endregion
 
@@ -41,8 +41,7 @@ class Agent(object):
         :return: (reward, done, info) tuple.
         """
         info = "score:{:4}".format(self.score)
-        x, y, new_info = self.choose_move(grid)
-        move = (x, y)
+        move, new_info = self.choose_move(grid)
 
         was_valid = grid.move_agent(self, move)
 
