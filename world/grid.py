@@ -46,45 +46,44 @@ class Grid(object):
         return grid_str
 
     # region Grid life
-    def is_valid_move(self, x, y):
-        return 0 < x < self.size_x - 1 and \
-               0 < y < self.size_y - 1 and \
-               self.map[y][x] is not Cells.WALL
+    def is_valid_move(self, move):
+        x, y = move
+        return \
+            0 < x < self.size_x - 1 and \
+            0 < y < self.size_y - 1 and \
+            self.map[y][x] is not Cells.WALL
 
-    def move_agent(self, agent, x, y):
+    def move_agent(self, agent, move):
         """
         Tries to move the agent to the given position.
 
         :param agent: the agent to move.
-        :param x: The desired latitude.
-        :param y: The desired longitude.
+        :param move: The desired move.
         :return: True if the agent moved.
 
         :type agent Agent
-        :type x int
-        :type y int
+        :type move tuple
         :rtype bool
         """
-        if self.is_valid_move(x, y):
-            agent.x, agent.y = x, y
+        if self.is_valid_move(move):
+            agent.x, agent.y = move
             return True
         return False
 
-    def reward_move(self, x, y):
+    def reward_move(self, move):
         """
         Rewards the agent for their move.
 
-        :param x: their new longitude.
-        :param y: their new latitude.
+        :param move: their new position.
         :return: the computed reward.
 
-        :type x int
-        :type y int
+        :type move tuple
         :rtype int
         """
 
         info = ""
         reward = 0
+        x, y = move
         if self[y][x] == Cells.FOOD.value:
             info += "|food"
             reward = 1
@@ -114,18 +113,19 @@ class Grid(object):
         return [Cells.WALL] * size
 
     def add_agents(self, agents: list):
-        """
-
-        :type agents: List[Agent]
-        """
         for a in agents:
             self.add_agent(a)
 
     def add_agent(self, agent):
+        """
+        Adds this agent at a random place on the map.
+
+        :type agent Agent
+        """
         y = randrange(1, self.size_y - 1)
         x = randrange(1, self.size_x - 1)
 
-        self.move_agent(agent, x, y)
+        self.move_agent(agent, (x, y))
         self.agents.append(agent)
         return agent
     # endregion

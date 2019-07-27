@@ -9,27 +9,16 @@ class RandomAgent(Agent):
     An agent that acts at random.
     """
 
-    def act(self, grid):
-        info = "score:{:4}".format(self.score)
-
-        # Act
-        new_x, new_y = self._random_step()
-        was_valid = grid.move_agent(self, new_x, new_y)
-        info += "|move(%s)" % self.position
-        if not was_valid:
-            info += "|invalid"
-
-        reward, new_info = grid.reward_move(new_x, new_y)
-        info += new_info
-
-        # We're done if no more resources!
-        return reward, grid.stats.resources == 0, info
+    def choose_move(self, grid):
+        return self._random_step()
 
     def _random_step(self):
         if randint(0, 1) == 0:  # Horizontal
-            new_x = self.x + random.choice([-1, 1])
-            new_y = self.y
+            change_x = self.x + random.choice([-1, 1])
+            info = "left" if change_x is -1 else "right"
+            change_y = self.y
         else:
-            new_y = self.y + random.choice([-1, 1])
-            new_x = self.x
-        return new_x, new_y
+            change_y = self.y + random.choice([-1, 1])
+            info = "down" if change_y is -1 else "up"
+            change_x = self.x
+        return change_x, change_y, info

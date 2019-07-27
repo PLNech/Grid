@@ -1,8 +1,10 @@
 #! /usr/bin/env python
 from curses import wrapper
+from typing import List
 
 from agents.agent import Agent
 from agents.random import RandomAgent
+from agents.wanderer import Wanderer
 from world.grid import Grid
 
 grid_height = 10
@@ -14,23 +16,11 @@ def main(stdscr):
     run(stdscr)
 
 
-class Wanderer(Agent):
-    def __init__(self, name="W"):
-        super().__init__(name)
-        self.view = []
-
-    def act(self, grid):
-        return super().act(grid)
-
-    def process_reward(self, reward):
-        super().process_reward(reward)
-
-
 def run(window):
     run_i = 0
     done = False
-    agents = [RandomAgent(x) for x in "ABCDE"]
-    # agents.append(Wanderer())
+    agents = [RandomAgent(x) for x in "ABCDE"]  # type: List[Agent]
+    agents.append(Wanderer())
     grid = Grid(grid_size)
     grid.add_agents(agents)
     window.addstr("Generated map of size %s with %s resources and %s walls:\n\n%s"
