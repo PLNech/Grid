@@ -1,12 +1,12 @@
 #! /usr/bin/env python
 from curses import wrapper
-from typing import List
 
 from agents.agent import Agent
 from agents.random import RandomAgent
 from world.grid import Grid
 
-grid_size = 20, 10
+grid_height = 10
+grid_size = grid_height * 2, grid_height
 
 
 def main(stdscr):
@@ -54,10 +54,10 @@ def run(window):
         window.getch()
 
     window.timeout(10000)
-    window.addstr("Done!")
+    window.addstr("Done in %i rounds!" % run_i)
     for agent in agents:
-        window.addstr("\n%s Got %s points in %s rounds."
-                      % (agent.name, agent.score, run_i))
+        window.addstr("\n%s got %s points."
+                      % (agent.name, agent.score))
     window.getch()
 
 
