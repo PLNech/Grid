@@ -6,8 +6,8 @@ from agents.agent import Agent
 from agents.wanderer import Wanderer
 from world.grid import Grid
 
-grid_height = 40
-grid_size = grid_height * 2, grid_height
+grid_height = 20
+grid_size = grid_height * 2, grid_height # TODO: Display iso
 
 
 def main(stdscr):
