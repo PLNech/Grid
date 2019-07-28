@@ -49,7 +49,7 @@ class Agent(object):
         Acts on the given grid, hoping for a reward.
 
         :param grid: Grid
-        :return: (reward, done, info) tuple.
+        :return: reward, done, info.
         """
         info = "score:{:4}".format(self.score)
         move, choice_info = self.choose_move(grid)
@@ -79,11 +79,14 @@ class Agent(object):
             move = Move.LEFT if d_x - self.x < 0 else Move.RIGHT
         else:
             move = Move.DOWN if d_y - self.y < 0 else Move.UP
-        return (self.x + move.x, self.y + move.y), str(move)
+        return self.move(move), str(move)
+
+    def move(self, m):
+        return self.x + m.x, self.y + m.y
 
     def _random_step(self):
         move = random.choice(list(Move))
-        return self.move_towards((self.x + move.x, self.y + move.y))
+        return self.move_towards(self.move(move))
 
     @property
     def position(self):

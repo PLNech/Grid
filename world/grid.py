@@ -99,7 +99,7 @@ class Grid(object):
 
         for i in range(1, size - 1):
             d100 = randint(1, 100)
-            if d100 < 10:
+            if d100 < 30:
                 cell = Cells.FOOD
             else:
                 cell = Cells.EMPTY

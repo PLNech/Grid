@@ -10,7 +10,6 @@ class Move(Enum):
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.move = x, y
 
     def __str__(self):
         return {
