@@ -46,6 +46,7 @@ def run(window):
 
     window.timeout(10000)
     window.addstr("\nDone in %i rounds!" % run_i)
+    agents.sort(key=lambda a: a.score)
     for agent in agents:
         window.addstr("\n%s got %s points."
                       % (agent.name, agent.score))
