@@ -1,7 +1,7 @@
 from IN import INT16_MAX
 
 from agents.agent import Agent
-from world.cells import Cells
+from model.cells import Cells
 
 
 class Wanderer(Agent):

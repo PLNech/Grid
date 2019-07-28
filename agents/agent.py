@@ -1,5 +1,12 @@
+import random
 from abc import abstractmethod
-from random import randint, choice
+
+from model.moves import Move
+
+
+class AgentLog(object):
+    def __init__(self):
+        self.moves = []
 
 
 class Agent(object):
@@ -69,21 +76,14 @@ class Agent(object):
         """
         d_x, d_y = destination
         if self.x != d_x:
-            change = -1 if d_x - self.x < 0 else 1
-            info = "left" if change is -1 else "right"
-            return (self.x + change, self.y), info
+            move = Move.LEFT if d_x - self.x < 0 else Move.RIGHT
         else:
-            change = (-1 if d_y - self.y < 0 else 1)
-            info = "down" if change is -1 else "up"
-            return (self.x, self.y + change), info
+            move = Move.DOWN if d_y - self.y < 0 else Move.UP
+        return (self.x + move.x, self.y + move.y), str(move)
 
     def _random_step(self):
-        change = choice([-1, 1])
-        if randint(0, 1) == 0:  # Horizontal
-            destination = (self.x + change, self.y)
-        else:
-            destination = (self.x, self.y + change)
-        return self.move_towards(destination)
+        move = random.choice(list(Move))
+        return self.move_towards((self.x + move.x, self.y + move.y))
 
     @property
     def position(self):

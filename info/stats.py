@@ -1,4 +1,4 @@
-from world.cells import Cells
+from model.cells import Cells
 
 
 class GridStats(object):

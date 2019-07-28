@@ -34,7 +34,7 @@ def run(window):
         run_i += 1
         window.addstr("Run %s\n" % run_i)
         for agent in agents:
-            window.addstr("\n[%s] " % agent)
+            window.addstr("\n%s " % agent)
 
             reward, done, info = agent.act(grid)
             agent.process_reward(reward)

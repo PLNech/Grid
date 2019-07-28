@@ -10,11 +10,10 @@ class Cells(Enum):
     CRUMBS = 4
 
     def __str__(self):
-        key = self
         return {
             self.WALL_H: "|",
             self.WALL: "-",
             self.EMPTY: " ",
             self.FOOD: "⋄",
-            self.CRUMBS: ",",
-        }[key]
+            self.CRUMBS: "·",
+        }[self]
