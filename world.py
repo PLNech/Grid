@@ -22,7 +22,7 @@ def main(stdscr):
 def run(window):
     run_i = 0
     done = False
-    agents = [Wanderer(x, i * 5) for (i, x) in enumerate("ABCDE", 1)]  # type: List[Agent]
+    agents = [Wanderer(x, int(i * grid_height / 10)) for (i, x) in enumerate("ABCDE", 1)]  # type: List[Agent]
     grid = Grid(grid_size)
     grid.add_agents(agents)
 
