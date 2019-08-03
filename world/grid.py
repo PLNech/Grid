@@ -1,7 +1,7 @@
 from random import randint, randrange
 
-from model.cells import Cells
 from info.stats import GridStats
+from model.cells import Cells
 
 
 class Grid(object):
@@ -9,7 +9,7 @@ class Grid(object):
     A bidimensional world where agents survive and may thrive.
     """
 
-    def __init__(self, size_x=10, size_y=None):
+    def __init__(self, size_x=10, size_y=None, abundance=.1):
         if size_y is None:
             if type(size_x) is tuple:
                 self.size_x, self.size_y = size_x
@@ -18,6 +18,7 @@ class Grid(object):
                 self.size_y = size_x
 
         self.size = size_x, size_y
+        self.abundance = abundance
         self.map = []
         self.agents = []
         self.stats = GridStats(self)
@@ -93,13 +94,12 @@ class Grid(object):
     # endregion
 
     # region Map generation
-    @staticmethod
-    def random_lane(size=10):
+    def random_lane(self, size=10):
         lane = [Cells.WALL_H]
 
         for i in range(1, size - 1):
             d100 = randint(1, 100)
-            if d100 < 30:
+            if d100 < int(100 * self.abundance):
                 cell = Cells.FOOD
             else:
                 cell = Cells.EMPTY

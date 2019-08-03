@@ -7,8 +7,11 @@ from agents.agent import Agent
 from agents.wanderer import Wanderer
 from world.grid import Grid
 
-grid_height = 20
+grid_abundance = .05
+grid_height = 40
 grid_size = grid_height * 2, grid_height  # TODO: Display iso
+timeout_pauses = 3000
+timeout_run = 50 if sum(grid_size) < 40 else 1
 
 
 def main(stdscr):
@@ -23,15 +26,15 @@ def run(window):
     run_i = 0
     done = False
     agents = [Wanderer(x, int(i * grid_height / 10)) for (i, x) in enumerate("ABCDE", 1)]  # type: List[Agent]
-    grid = Grid(grid_size)
+    grid = Grid(grid_size, abundance=grid_abundance)
     grid.add_agents(agents)
 
     window.addstr("Generated map of size %s with %s resources and %s walls:\n\n%s"
                   % (grid_size, grid.stats.resources, grid.stats.walls, grid))
-    window.timeout(5000)
+    window.timeout(timeout_pauses)
     window.getch()
 
-    window.timeout(50 if sum(grid_size) < 40 else 1)
+    window.timeout(timeout_run)
     while not done:
         run_i += 1
         window.clear()
@@ -47,7 +50,7 @@ def run(window):
         window.addstr("\n\n%s" % grid)
         window.getch()
 
-    window.timeout(5000)
+    window.timeout(timeout_pauses)
     window.addstr("\nDone in %i rounds!" % run_i)
     agents.sort(key=lambda a: a.score)
     for agent in agents:
