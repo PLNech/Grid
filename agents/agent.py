@@ -8,6 +8,13 @@ class AgentLog(object):
     def __init__(self):
         self.moves = []
 
+    def append(self, move):
+        self.moves.append(move)
+
+    def __repr__(self):
+        moves_str = [str(m) for m in self.moves[-3:]]
+        return "".join(moves_str)
+
 
 class Agent(object):
     """
@@ -24,6 +31,7 @@ class Agent(object):
         self.x = 0
         self.y = 0
         self.score = 0
+        self.log = AgentLog()
 
     def __str__(self):
         return "[{}]".format(self.name)
@@ -59,6 +67,7 @@ class Agent(object):
         if not was_valid:
             info += "|invalid"
         else:
+            self.log.append(move)
             info += "|move(%s)" % self.position
 
         reward, reward_info = grid.reward_move(move)
