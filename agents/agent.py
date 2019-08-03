@@ -47,8 +47,7 @@ class Agent(object):
 
     @abstractmethod
     def choose_move(self, grid):
-        info = ""
-        return (self.x, self.y), info
+        return self.x, self.y
 
     # endregion
 
@@ -59,44 +58,46 @@ class Agent(object):
         :param grid: Grid
         :return: reward, done, info.
         """
-        info = "score:{:4}".format(self.score)
-        move, choice_info = self.choose_move(grid)
-        info += "|{:25}".format(choice_info)
+        info_score = "score:{:3}".format(self.score)
+        move = self.choose_move(grid)
+        info_log = "{:2}".format(repr(self.log))
 
         was_valid = grid.move_agent(self, move)
         if not was_valid:
-            info += "|invalid"
+            info_move = "|invalid!"
         else:
             self.log.append(move)
-            info += "|move(%s)" % self.position
+            info_move = "|move(%s)" % self.position
 
-        reward, reward_info = grid.reward_move(move)
-        if reward_info is None:
-            reward_info = "BaseAgent"
+        reward, info_reward = grid.reward_move(move)
+        if info_reward is None:
+            info_reward = "BaseAgent"
 
-        return reward, grid.stats.resources == 0, info + reward_info
+        infos = [info_score, info_log, info_move, info_reward]
+        info_str = "|".join(["{}" * len(infos)])
+        return reward, grid.stats.resources == 0, info_str.format(*infos)
 
     def move_towards(self, destination):
         """
         Moves the agent towards the given destination.
 
         :param destination: a (x, y) destination to reach.
-        :return: the move coordinates and the verbose move taken.
+        :return: the move coordinates.
         """
         d_x, d_y = destination
         if self.x != d_x:
             move = Move.LEFT if d_x - self.x < 0 else Move.RIGHT
         else:
             move = Move.DOWN if d_y - self.y < 0 else Move.UP
-        return self.move(move), str(move)
+        return self.destination_of(move)
 
-    def move(self, m):
+    def destination_of(self, m):
         return self.x + m.x, self.y + m.y
 
     def _random_step(self):
         move = random.choice(list(Move))
-        return self.move_towards(self.move(move))
+        return self.move_towards(self.destination_of(move))
 
     @property
     def position(self):
-        return "{:2},{:2}".format(self.x, self.y)
+        return "{:02},{:02}".format(self.x, self.y)

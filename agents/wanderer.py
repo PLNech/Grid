@@ -21,10 +21,10 @@ class Wanderer(Agent):
 
         min_distance, nearest = self.analyze_resources(resources)
         if nearest[0] == -1:
-            move, choice_info = self._random_step()
+            move = self._random_step()
         else:
-            move, choice_info = self.move_towards(nearest)
-        return move, "{:5}|{}|{}|{}".format(choice_info, spot_info, min_distance is not INT16_MAX, len(resources))
+            move = self.move_towards(nearest)
+        return move
 
     def analyze_resources(self, resources):
         nearest = -1, -1
