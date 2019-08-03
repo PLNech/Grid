@@ -33,8 +33,9 @@ def run(window):
 
     window.timeout(50 if sum(grid_size) < 40 else 1)
     while not done:
+        run_i += 1
         window.clear()
-        window.addstr("Run %s\n" % ++run_i)
+        window.addstr("Run %s\n" % run_i)
         for agent in agents:
             window.addstr("\n%s " % agent)
 
