@@ -60,6 +60,13 @@ class Runner(object):
         self.scr.clear()
         self.scr.addstr("Run %s\n" % run_i)
 
+        done = self.rule_move_agents(done, world)
+
+        self.scr.addstr("\n\n%s" % world.print_grid())
+        self.scr.getch()
+        return done
+
+    def rule_move_agents(self, done, world):
         for agent in world.agents:
             self.scr.addstr("\n%s " % agent)
 
@@ -69,14 +76,12 @@ class Runner(object):
             self.scr.addstr("%s |" % agent.position)
             if len(info):
                 self.scr.addstr(info)
-
-        self.scr.addstr("\n\n%s" % world.print_grid())
-        self.scr.getch()
         return done
 
     def init_world(self):
         world = World()
         info = world.generate(self.config.height, self.config.abundance)
+
         self.scr.addstr(info)
         self.scr.timeout(self.config.timeout_pauses)
         self.scr.getch()
