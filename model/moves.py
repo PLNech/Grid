@@ -1,4 +1,5 @@
 from enum import Enum
+from random import choice
 
 
 class Move(Enum):
@@ -6,6 +7,7 @@ class Move(Enum):
     RIGHT = 1, 0
     DOWN = 0, -1
     UP = 0, 1
+    NONE = 0, 0
 
     def __init__(self, x, y):
         self.x = x
@@ -16,5 +18,10 @@ class Move(Enum):
             Move.LEFT: "🡸",
             Move.RIGHT: "🡺",
             Move.DOWN: "🡻",
-            Move.UP: "🡹"
+            Move.UP: "🡹",
+            Move.NONE: "_"
         }[self]
+
+    @staticmethod
+    def random():
+        return choice([Move.LEFT, Move.RIGHT, Move.UP, Move.DOWN])

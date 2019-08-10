@@ -40,16 +40,31 @@ class World(object):
         y = randrange(1, self.grid.size_y - 1)
         x = randrange(1, self.grid.size_x - 1)
 
-        self.move_agent(agent, (x, y))
+        self.put(agent, (x, y))
         self.agents.append(agent)
         return agent
 
-    def move_agent(self, agent, position):
+    def move(self, agent, move):
         """
-        Tries to move the agent to the given position.
+        Tries to move the agent.
 
         :param agent: the agent to move.
-        :param position: The desired move.
+        :param move: The desired move.
+        :return: True if the agent moved.
+
+        :type agent Agent
+        :type move Move
+        :rtype bool
+        """
+        position = (agent.x + move.x, agent.y + move.y)
+        return self.put(agent, position)
+
+    def put(self, agent, position):
+        """
+        Tries to put the agent at the given position.
+
+        :param agent: the agent to move.
+        :param position: The desired position.
         :return: True if the agent moved.
 
         :type agent Agent
@@ -61,20 +76,19 @@ class World(object):
             return True
         return False
 
-    def reward_move(self, move):
+    def reward(self, agent):
         """
-        Rewards the agent for their move.
+        Rewards the agent.
 
-        :param move: their new position.
         :return: the computed reward.
 
-        :type move tuple
+        :type agent Agent
         :rtype int
         """
 
         info = "none"
         reward = 0
-        x, y = move
+        x, y = agent.x, agent.y
         if self.grid[y][x] == Cells.FOOD.value:
             info = "food"
             reward = 1

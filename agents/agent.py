@@ -1,4 +1,3 @@
-import random
 from abc import abstractmethod
 
 from info.move_log import MoveLog
@@ -49,21 +48,22 @@ class Agent(object):
         """
         info_score = "score:{:3}".format(self.score)
         move = self.choose_move(world.grid)
-        info_log = "{:2}".format(repr(self.log))
+        info_log = "{:2}".format(str(self.log))
 
-        was_valid = world.move_agent(self, move)
+        was_valid = world.move(self, move)
         if not was_valid:
-            info_move = "|invalid!"
+            info_move = "|fail(%s)!" % self.position
+            self.log.append(Move.NONE)
         else:
             self.log.append(move)
             info_move = "|move(%s)" % self.position
 
-        reward, info_reward = world.reward_move(move)
+        reward, info_reward = world.reward(self)
         if info_reward is None:
             info_reward = "BaseAgent"
 
-        infos = [str(i) + "/" for i in [info_score, info_move, info_log, info_reward]]
-        info_str = "|".join(["{}" * len(infos)])
+        infos = [str(i) for i in [info_score, info_move, info_reward, info_log]]
+        info_str = " | ".join(infos)
         return reward, world.grid.stats.resources == 0, info_str.format(*infos)
 
     def move_towards(self, position):
@@ -71,21 +71,19 @@ class Agent(object):
         Moves the agent towards the given position.
 
         :param position: a (x, y) position to reach.
-        :return: the move coordinates.
+        :return: the right move.
+
+        :rtype Move
         """
         d_x, d_y = position
+
         if self.x != d_x:
-            move = Move.LEFT if d_x - self.x < 0 else Move.RIGHT
+            return Move.LEFT if d_x - self.x < 0 else Move.RIGHT
         else:
-            move = Move.DOWN if d_y - self.y < 0 else Move.UP
-        return self.destination_of(move)
+            return Move.DOWN if d_y - self.y < 0 else Move.UP
 
-    def destination_of(self, m):
-        return self.x + m.x, self.y + m.y
-
-    def _random_step(self):
-        move = random.choice(list(Move))
-        return self.move_towards(self.destination_of(move))
+    def _random_move(self):
+        return Move.random()
 
     @property
     def position(self):

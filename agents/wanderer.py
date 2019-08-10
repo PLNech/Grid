@@ -21,7 +21,7 @@ class Wanderer(Agent):
 
         min_distance, nearest = self.analyze_resources(resources)
         if nearest[0] == -1:
-            move = self._random_step()
+            move = self._random_move()
         else:
             move = self.move_towards(nearest)
         return move

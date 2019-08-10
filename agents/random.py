@@ -10,4 +10,4 @@ class RandomWalker(Agent):
         super().__init__(name)
 
     def choose_move(self, grid):
-        return self._random_step()
+        return self._random_move()
