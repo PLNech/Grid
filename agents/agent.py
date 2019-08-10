@@ -18,8 +18,10 @@ class Agent(object):
         self.name = name
         self.x = 0
         self.y = 0
-        self.score = 0
+        self.alive = True
         self.log = MoveLog()
+        self.resources = 10
+        self.score = 0
 
     @property
     def fails(self):
@@ -35,6 +37,7 @@ class Agent(object):
 
         :type reward int
         """
+        self.resources += reward
         self.score += reward
 
     @abstractmethod

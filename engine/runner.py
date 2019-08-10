@@ -1,4 +1,6 @@
 # from run_world import grid_height, grid_abundance, timeout_pauses, timeout_run
+from random import randint
+
 from world.world import World
 
 
@@ -33,7 +35,7 @@ class Runner(object):
         format_score = "{:" + str(len_scores) + "}"
         format_fails = "{:" + str(len_fails) + "}"
 
-        world.agents.sort(key=lambda a: a.score)
+        world.agents.sort(key=lambda a: a.resources)
         for agent in world.agents:
             info_score = format_score.format(agent.score)
             info_fails = format_fails.format(agent.fails)
@@ -60,14 +62,16 @@ class Runner(object):
         self.scr.clear()
         self.scr.addstr("Run %s\n" % run_i)
 
-        done = self.rule_move_agents(done, world)
+        done = self.rule_move_agents(world)
+        done = self.rule_hunger(world)
 
         self.scr.addstr("\n\n%s" % world.print_grid())
         self.scr.getch()
         return done
 
-    def rule_move_agents(self, done, world):
-        for agent in world.agents:
+    def rule_move_agents(self, world):
+        done = False
+        for agent in [a for a in world.agents if a.alive]:
             self.scr.addstr("\n%s " % agent)
 
             reward, done, info = world.act(agent)
@@ -77,6 +81,15 @@ class Runner(object):
             if len(info):
                 self.scr.addstr(info)
         return done
+
+    def rule_hunger(self, world):
+        for agent in world.agents:
+            d10 = randint(1, 10)
+            if d10 == 1:
+                agent.resources -= 1
+            if agent.resources == 0:
+                agent.alive = False
+        return len([a for a in world.agents if a.alive]) == 0
 
     def init_world(self):
         world = World()

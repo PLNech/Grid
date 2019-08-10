@@ -103,7 +103,7 @@ class World(object):
         :param agent: Agent
         :return: reward, done, info.
         """
-        info_score = "score:{:3}".format(agent.score)
+        info_score = "res:{:3}".format(agent.resources)
         move = agent.choose_move(self.grid)
         info_log = "{:2}".format(str(agent.log))
 
