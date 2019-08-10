@@ -18,14 +18,14 @@ class World(object):
         self.agents = []
         self.grid = Grid()
 
-    def generate(self, grid_height=20, grid_abundance=.05):
-        grid_width = grid_height * 2
+    def generate(self, grid_width=20, grid_abundance=.05):
+        self.grid = Grid(grid_width, abundance=grid_abundance)
 
-        self.add_agents([Wanderer(x, int(i * grid_height / 10)) for (i, x) in enumerate("ABCDE", 1)])
+        self.add_agents([Wanderer(x, int(i * grid_width / 10)) for (i, x) in enumerate("ABCDE", 1)])
         self.add_agent(Sniper())
-        self.grid = Grid(grid_width, grid_height, abundance=grid_abundance)
+
         return "Generated map of size %s, %s with %s resources and %s walls:\n\n%s" % (
-            grid_width, grid_height, self.grid.stats.resources, self.grid.stats.walls, self.print_grid())
+            grid_width, grid_width, self.grid.stats.resources, self.grid.stats.walls, self.print_grid())
 
     def add_agents(self, agents: list):
         for a in agents:
@@ -44,20 +44,20 @@ class World(object):
         self.agents.append(agent)
         return agent
 
-    def move_agent(self, agent, move):
+    def move_agent(self, agent, destination):
         """
         Tries to move the agent to the given position.
 
         :param agent: the agent to move.
-        :param move: The desired move.
+        :param destination: The desired move.
         :return: True if the agent moved.
 
         :type agent Agent
-        :type move tuple
+        :type destination tuple
         :rtype bool
         """
-        if self.grid.is_valid_move(move):
-            agent.x, agent.y = move
+        if self.grid.is_valid(destination):
+            agent.x, agent.y = destination
             return True
         return False
 

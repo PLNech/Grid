@@ -6,9 +6,8 @@ from world.world import World
 
 grid_abundance = .05
 grid_height = 20
-grid_size = grid_height * 2, grid_height  # TODO: Display iso
 timeout_pauses = 3000
-timeout_run = 50 if sum(grid_size) < 40 else 1
+timeout_run = 50 if grid_height < 20 else 10
 
 
 def main(stdscr):

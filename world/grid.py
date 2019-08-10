@@ -11,12 +11,11 @@ class Grid(object):
 
     def __init__(self, size_x=10, size_y=None, abundance=.1):
         if size_y is None:
-            self.size_x, self.size_y = size_x, size_x
+            self.size_x, self.size_y = size_x * 2, size_x
         else:
             self.size_x = size_x
             self.size_y = size_y
 
-        self.size = size_x, size_y
         self.abundance = abundance
         self.map = []
         self.stats = GridStats(self)
@@ -33,8 +32,14 @@ class Grid(object):
         return self.map[item]
 
     # region Grid life
-    def is_valid_move(self, move):
-        x, y = move
+    def is_valid(self, destination):
+        """
+        Returns true if the destination is within the map and walkable.
+
+        :type destination tuple
+        :rtype bool
+        """
+        x, y = destination
         return \
             0 < x < self.size_x - 1 and \
             0 < y < self.size_y - 1 and \
