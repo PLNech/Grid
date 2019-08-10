@@ -1,19 +1,8 @@
 import random
 from abc import abstractmethod
 
+from info.move_log import MoveLog
 from model.moves import Move
-
-
-class AgentLog(object):
-    def __init__(self):
-        self.moves = []
-
-    def append(self, move):
-        self.moves.append(move)
-
-    def __repr__(self):
-        moves_str = [str(m) for m in self.moves[-3:]]
-        return "".join(moves_str)
 
 
 class Agent(object):
@@ -31,7 +20,7 @@ class Agent(object):
         self.x = 0
         self.y = 0
         self.score = 0
-        self.log = AgentLog()
+        self.log = MoveLog()
 
     def __str__(self):
         return "[{}]".format(self.name)
