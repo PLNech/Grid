@@ -5,6 +5,7 @@ from agents.agent import Agent
 from agents.sniper import Sniper
 from agents.wanderer import Wanderer
 from model.cells import Cells
+from model.moves import Move
 from world.grid import Grid
 
 
@@ -94,6 +95,38 @@ class World(object):
             reward = 1
             self.grid[y][x] = Cells.CRUMBS.value
         return reward, info
+
+    def act(self, agent):
+        """
+        Acts on the given grid, hoping for a reward.
+
+        :param agent: Agent
+        :return: reward, done, info.
+        """
+        info_score = "score:{:3}".format(agent.score)
+        move = agent.choose_move(self.grid)
+        info_log = "{:2}".format(str(agent.log))
+
+        was_valid = self.move(agent, move)
+        info_move = "|"
+        if was_valid:
+            info_move += "move"
+        else:
+            info_move += "fail"
+            move = Move.NONE
+
+        agent.log.append(move)
+        info_move += "(%s)" % agent.position
+
+        reward, info_reward = self.reward(agent)
+        if info_reward is None:
+            info_reward = "BaseAgent"
+
+        infos = [str(i) for i in [info_score, info_move, info_reward, info_log]]
+        info_str = " | ".join(infos)
+        return reward, self.grid.stats.resources == 0, info_str.format(*infos)
+
+        pass
 
     # TODO: More idiomatic repr with agents
     def print_grid(self):

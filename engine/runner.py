@@ -42,7 +42,7 @@ class Runner(object):
             for agent in world.agents:
                 self.scr.addstr("\n%s " % agent)
 
-                reward, done, info = agent.act(world)
+                reward, done, info = world.act(agent)
                 agent.process_reward(reward)
 
                 self.scr.addstr("%s |" % agent.position)
@@ -54,8 +54,16 @@ class Runner(object):
 
         self.scr.timeout(self.config.timeout_pauses)
         self.scr.addstr("\nDone in %i rounds!" % run_i)
+
+        len_scores = max([len(str(a.score)) for a in world.agents])
+        len_fails = max([len(str(a.fails)) for a in world.agents])
+        format_score = "{:" + str(len_scores) + "}"
+        format_fails = "{:" + str(len_fails) + "}"
+
         world.agents.sort(key=lambda a: a.score)
         for agent in world.agents:
-            self.scr.addstr("\n%s got %s points, failed %i times."
-                            % (agent.name, agent.score, agent.fails))
+            info_score = format_score.format(agent.score)
+            info_fails = format_fails.format(agent.fails)
+
+            self.scr.addstr("\n{} got {} points, failed {} times.".format(agent.name, info_score, info_fails))
         self.scr.getch()

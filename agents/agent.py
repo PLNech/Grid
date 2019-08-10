@@ -43,36 +43,6 @@ class Agent(object):
 
     # endregion
 
-    def act(self, world):  # TODO: Invert control, don't let agent touch world
-        """
-        Acts on the given grid, hoping for a reward.
-
-        :param world: World
-        :return: reward, done, info.
-        """
-        info_score = "score:{:3}".format(self.score)
-        move = self.choose_move(world.grid)
-        info_log = "{:2}".format(str(self.log))
-
-        was_valid = world.move(self, move)
-        info_move = "|"
-        if was_valid:
-            info_move += "move"
-        else:
-            info_move += "fail"
-            move = Move.NONE
-
-        self.log.append(move)
-        info_move += "(%s)" % self.position
-
-        reward, info_reward = world.reward(self)
-        if info_reward is None:
-            info_reward = "BaseAgent"
-
-        infos = [str(i) for i in [info_score, info_move, info_reward, info_log]]
-        info_str = " | ".join(infos)
-        return reward, world.grid.stats.resources == 0, info_str.format(*infos)
-
     def move_towards(self, position):
         """
         Moves the agent towards the given position.

@@ -11,7 +11,8 @@ timeout_run = 50 if grid_height < 20 else 1
 
 
 def main(stdscr):
-    runner = Runner(stdscr, RunnerConfig(grid_height, grid_abundance, timeout_pauses, timeout_run))
+    config = RunnerConfig(grid_height, grid_abundance, timeout_pauses, timeout_run)
+    runner = Runner(stdscr, config)
     runner.run_infinite()
 
 
