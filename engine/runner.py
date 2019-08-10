@@ -24,36 +24,9 @@ class Runner(object):
             self.scr.getch()
 
     def run(self):
-        run_i = 0
-        done = False
+        world = self.init_world()
 
-        world = World()
-        info = world.generate(self.config.height, self.config.abundance)
-
-        self.scr.addstr(info)
-        self.scr.timeout(self.config.timeout_pauses)
-        self.scr.getch()
-
-        self.scr.timeout(self.config.timeout_run)
-        while not done:
-            run_i += 1
-            self.scr.clear()
-            self.scr.addstr("Run %s\n" % run_i)
-            for agent in world.agents:
-                self.scr.addstr("\n%s " % agent)
-
-                reward, done, info = world.act(agent)
-                agent.process_reward(reward)
-
-                self.scr.addstr("%s |" % agent.position)
-                if len(info):
-                    self.scr.addstr(info)
-
-            self.scr.addstr("\n\n%s" % world.print_grid())
-            self.scr.getch()
-
-        self.scr.timeout(self.config.timeout_pauses)
-        self.scr.addstr("\nDone in %i rounds!" % run_i)
+        self.run_episode(world)
 
         len_scores = max([len(str(a.score)) for a in world.agents])
         len_fails = max([len(str(a.fails)) for a in world.agents])
@@ -65,5 +38,46 @@ class Runner(object):
             info_score = format_score.format(agent.score)
             info_fails = format_fails.format(agent.fails)
 
-            self.scr.addstr("\n{} got {} points, failed {} times.".format(agent.name, info_score, info_fails))
+            self.scr.addstr("\n{} got {} points, failed {} times."
+                            .format(agent.name, info_score, info_fails))
         self.scr.getch()
+
+    def run_episode(self, world):
+        run_i = 0
+        done = False
+
+        self.scr.timeout(self.config.timeout_run)
+        while not done:
+            run_i += 1
+            done = self.run_round(run_i, world)
+
+        self.scr.timeout(self.config.timeout_pauses)
+        self.scr.addstr("\nDone in %i rounds!" % run_i)
+
+    def run_round(self, run_i, world):
+        done = False
+
+        self.scr.clear()
+        self.scr.addstr("Run %s\n" % run_i)
+
+        for agent in world.agents:
+            self.scr.addstr("\n%s " % agent)
+
+            reward, done, info = world.act(agent)
+            agent.process_reward(reward)
+
+            self.scr.addstr("%s |" % agent.position)
+            if len(info):
+                self.scr.addstr(info)
+
+        self.scr.addstr("\n\n%s" % world.print_grid())
+        self.scr.getch()
+        return done
+
+    def init_world(self):
+        world = World()
+        info = world.generate(self.config.height, self.config.abundance)
+        self.scr.addstr(info)
+        self.scr.timeout(self.config.timeout_pauses)
+        self.scr.getch()
+        return world
