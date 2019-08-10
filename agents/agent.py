@@ -40,31 +40,31 @@ class Agent(object):
 
     # endregion
 
-    def act(self, grid):
+    def act(self, world):  # TODO: Invert control, don't let agent touch world
         """
         Acts on the given grid, hoping for a reward.
 
-        :param grid: Grid
+        :param world: World
         :return: reward, done, info.
         """
         info_score = "score:{:3}".format(self.score)
-        move = self.choose_move(grid)
+        move = self.choose_move(world.grid)
         info_log = "{:2}".format(repr(self.log))
 
-        was_valid = grid.move_agent(self, move)
+        was_valid = world.move_agent(self, move)
         if not was_valid:
             info_move = "|invalid!"
         else:
             self.log.append(move)
             info_move = "|move(%s)" % self.position
 
-        reward, info_reward = grid.reward_move(move)
+        reward, info_reward = world.reward_move(move)
         if info_reward is None:
             info_reward = "BaseAgent"
 
-        infos = [info_score, info_log, info_move, info_reward]
+        infos = [str(i) + "/" for i in [info_score, info_move, info_log, info_reward]]
         info_str = "|".join(["{}" * len(infos)])
-        return reward, grid.stats.resources == 0, info_str.format(*infos)
+        return reward, world.grid.stats.resources == 0, info_str.format(*infos)
 
     def move_towards(self, destination):
         """
