@@ -4,6 +4,7 @@ from curses import wrapper
 from typing import List
 
 from agents.agent import Agent
+from agents.sniper import Sniper
 from agents.wanderer import Wanderer
 from world.grid import Grid
 
@@ -26,6 +27,7 @@ def run(window):
     run_i = 0
     done = False
     agents = [Wanderer(x, int(i * grid_height / 10)) for (i, x) in enumerate("ABCDE", 1)]  # type: List[Agent]
+    agents.append(Sniper())
     grid = Grid(grid_size, abundance=grid_abundance)
     grid.add_agents(agents)
 
