@@ -32,14 +32,14 @@ class Grid(object):
         return self.map[item]
 
     # region Grid life
-    def is_valid(self, destination):
+    def is_valid(self, position):
         """
-        Returns true if the destination is within the map and walkable.
+        Returns true if the position is within the map and walkable.
 
-        :type destination tuple
+        :type position tuple
         :rtype bool
         """
-        x, y = destination
+        x, y = position
         return \
             0 < x < self.size_x - 1 and \
             0 < y < self.size_y - 1 and \

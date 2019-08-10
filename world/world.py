@@ -44,20 +44,20 @@ class World(object):
         self.agents.append(agent)
         return agent
 
-    def move_agent(self, agent, destination):
+    def move_agent(self, agent, position):
         """
         Tries to move the agent to the given position.
 
         :param agent: the agent to move.
-        :param destination: The desired move.
+        :param position: The desired move.
         :return: True if the agent moved.
 
         :type agent Agent
-        :type destination tuple
+        :type position tuple
         :rtype bool
         """
-        if self.grid.is_valid(destination):
-            agent.x, agent.y = destination
+        if self.grid.is_valid(position):
+            agent.x, agent.y = position
             return True
         return False
 

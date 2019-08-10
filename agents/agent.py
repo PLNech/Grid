@@ -66,14 +66,14 @@ class Agent(object):
         info_str = "|".join(["{}" * len(infos)])
         return reward, world.grid.stats.resources == 0, info_str.format(*infos)
 
-    def move_towards(self, destination):
+    def move_towards(self, position):
         """
-        Moves the agent towards the given destination.
+        Moves the agent towards the given position.
 
-        :param destination: a (x, y) destination to reach.
+        :param position: a (x, y) position to reach.
         :return: the move coordinates.
         """
-        d_x, d_y = destination
+        d_x, d_y = position
         if self.x != d_x:
             move = Move.LEFT if d_x - self.x < 0 else Move.RIGHT
         else:
