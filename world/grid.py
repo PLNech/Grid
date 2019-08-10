@@ -82,11 +82,11 @@ class Grid(object):
         :rtype int
         """
 
-        info = ""
+        info = "none"
         reward = 0
         x, y = move
         if self[y][x] == Cells.FOOD.value:
-            info += "|food"
+            info = "food"
             reward = 1
             self[y][x] = Cells.CRUMBS.value
         return reward, info
