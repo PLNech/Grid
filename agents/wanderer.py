@@ -13,7 +13,7 @@ class Wanderer(Agent):
         self.view = []
 
     def __str__(self):
-        return "[{}|{:02}]".format(self.name, self.sight)
+        return "[{}|{:4}]".format(self.name, self.sight)
 
     def choose_move(self, grid):
         self.view = grid.map
