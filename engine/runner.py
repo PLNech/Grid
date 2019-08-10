@@ -44,9 +44,11 @@ class Runner(object):
 
                 reward, done, info = agent.act(world)
                 agent.process_reward(reward)
+
                 self.scr.addstr("%s |" % agent.position)
                 if len(info):
                     self.scr.addstr(info)
+
             self.scr.addstr("\n\n%s" % world.print_grid())
             self.scr.getch()
 
@@ -54,6 +56,6 @@ class Runner(object):
         self.scr.addstr("\nDone in %i rounds!" % run_i)
         world.agents.sort(key=lambda a: a.score)
         for agent in world.agents:
-            self.scr.addstr("\n%s got %s points."
-                            % (agent.name, agent.score))
+            self.scr.addstr("\n%s got %s points, failed %i times."
+                            % (agent.name, agent.score, agent.fails))
         self.scr.getch()

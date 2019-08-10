@@ -6,12 +6,13 @@ from model.moves import Move
 class MoveLog(object):
     moves = ...  # type: List[Move]
 
-    def __init__(self):
+    def __init__(self, limit=30):
         self.moves = []
+        self.limit = limit
 
     def append(self, move):
         self.moves.append(move)
 
     def __str__(self):
-        moves_str = [str(m) for m in self.moves[-20:]]
+        moves_str = [str(m) for m in self.moves[-self.limit:]]
         return " ".join(moves_str)

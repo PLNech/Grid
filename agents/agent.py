@@ -21,6 +21,10 @@ class Agent(object):
         self.score = 0
         self.log = MoveLog()
 
+    @property
+    def fails(self):
+        return len([x for x in self.log.moves if x is Move.NONE])
+
     def __str__(self):
         return "[{}]".format(self.name)
 
@@ -51,12 +55,15 @@ class Agent(object):
         info_log = "{:2}".format(str(self.log))
 
         was_valid = world.move(self, move)
-        if not was_valid:
-            info_move = "|fail(%s)!" % self.position
-            self.log.append(Move.NONE)
+        info_move = "|"
+        if was_valid:
+            info_move += "move"
         else:
-            self.log.append(move)
-            info_move = "|move(%s)" % self.position
+            info_move += "fail"
+            move = Move.NONE
+
+        self.log.append(move)
+        info_move += "(%s)" % self.position
 
         reward, info_reward = world.reward(self)
         if info_reward is None:
