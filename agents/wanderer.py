@@ -1,4 +1,4 @@
-from IN import INT16_MAX
+from sys import maxsize
 
 from agents.agent import Agent
 from model.cells import Cells
@@ -28,7 +28,7 @@ class Wanderer(Agent):
 
     def analyze_resources(self, resources):
         nearest = -1, -1
-        min_distance = INT16_MAX
+        min_distance = maxsize
 
         if len(resources):
             for r_x, r_y in resources:
@@ -36,8 +36,6 @@ class Wanderer(Agent):
                 if distance < min_distance:
                     min_distance = distance
                     nearest = r_x, r_y
-        else:
-            min_distance = INT16_MAX
         return min_distance, nearest
 
     def spot_resources(self, grid):
