@@ -21,6 +21,9 @@ class Grid(object):
 
         self.init_map(abundance)
 
+    def __getitem__(self, item):
+        return self.map[item]
+
     def init_map(self, abundance):
         for i in range(self.size_y):
             if i == 0 or i == self.size_y - 1:
@@ -28,9 +31,6 @@ class Grid(object):
             else:
                 lane = Grid.random_lane(self.size_x, abundance)
             self.map.append(lane)
-
-    def __getitem__(self, item):
-        return self.map[item]
 
     # region Grid life
     def is_valid(self, position):
