@@ -1,3 +1,4 @@
+import string
 from random import randrange
 from typing import List
 
@@ -20,13 +21,29 @@ class World(object):
         self.grid = Grid()
 
     def generate(self, grid_width=20, grid_abundance=.05):
+        """
+        Generates a new World: a Grid and some Agents.
+
+        :param grid_width: The width of the grid. Height is inferred.
+        :param grid_abundance: How abundant resources are.
+
+        :return: the genesis info.
+        """
         self.grid = Grid(grid_width, abundance=grid_abundance)
 
-        self.add_agents([Wanderer(x, int(i * grid_width / 10)) for (i, x) in enumerate("ABCDE", 1)])
+        self.add_wanderers(grid_width)
         self.add_agent(Sniper())
 
         return "Generated map of size %s, %s with %s resources and %s walls:\n\n%s" % (
             grid_width, grid_width, self.grid.stats.resources, self.grid.stats.walls, self.print_grid())
+
+    def add_wanderers(self, grid_width, nb=5):
+        for (i, x) in enumerate(string.ascii_uppercase, 1):
+            agent = Wanderer(x, int(i * grid_width / 10))
+
+            self.add_agent(agent)
+            if i == nb:
+                return
 
     def add_agents(self, agents: list):
         for a in agents:
