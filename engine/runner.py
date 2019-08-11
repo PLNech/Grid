@@ -1,6 +1,8 @@
 # from run_world import grid_height, grid_abundance, timeout_pauses, timeout_run
 from random import randint
 
+from agents.agent import Agent
+from info.logger import Logger
 from world.world import World
 
 
@@ -17,6 +19,7 @@ class Runner(object):
     def __init__(self, stdscr, config=RunnerConfig()) -> None:
         self.config = config
         self.scr = stdscr
+        self.log = Logger(stdscr)
 
     # TODO: Loop N times, then stats on agents
     def run_infinite(self):
@@ -40,8 +43,8 @@ class Runner(object):
             info_score = format_score.format(agent.score)
             info_fails = format_fails.format(agent.fails)
 
-            self.scr.addstr("\n{} got {} points, failed {} times."
-                            .format(agent.name, info_score, info_fails))
+            msg = "\n{} got {} points, failed {} times.".format(agent.name, info_score, info_fails)
+            self.log.print(msg)
         self.scr.getch()
 
     def run_episode(self, world):
@@ -54,32 +57,33 @@ class Runner(object):
             done = self.run_round(run_i, world)
 
         self.scr.timeout(self.config.timeout_pauses)
-        self.scr.addstr("\nDone in %i rounds!" % run_i)
+        self.log.print("\nDone in %i rounds!" % run_i)
 
     def run_round(self, run_i, world):
         done = False
 
         self.scr.clear()
-        self.scr.addstr("Run %s\n" % run_i)
+        self.log.show("Run %s\n" % run_i)
 
         done = self.rule_move_agents(world)
         done = self.rule_hunger(world)
 
-        self.scr.addstr("\n\n%s" % world.print_grid())
+        self.log.show("\n\n%s" % world.print_grid())
         self.scr.getch()
         return done
 
     def rule_move_agents(self, world):
         done = False
         for agent in [a for a in world.agents if a.alive]:
-            self.scr.addstr("\n%s " % agent)
+            self.log.show("\n%s " % agent)
 
             reward, done, info = world.act(agent)
+            self.log.log("{}: {} -> {}".format(agent.name, agent.move_log.last, reward))
             agent.process_reward(reward)
 
-            self.scr.addstr("%s |" % agent.position)
+            self.log.show("%s |" % agent.position)
             if len(info):
-                self.scr.addstr(info)
+                self.log.show(info)
         return done
 
     def rule_hunger(self, world):
@@ -95,7 +99,7 @@ class Runner(object):
         world = World()
         info = world.generate(self.config.height, self.config.abundance)
 
-        self.scr.addstr(info)
+        self.log.print(info)
         self.scr.timeout(self.config.timeout_pauses)
         self.scr.getch()
         return world

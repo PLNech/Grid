@@ -19,13 +19,13 @@ class Agent(object):
         self.x = 0
         self.y = 0
         self.alive = True
-        self.log = MoveLog()
+        self.move_log = MoveLog()
         self.resources = 10
         self.score = 0
 
     @property
     def fails(self):
-        return len([x for x in self.log.moves if x is Move.NONE])
+        return len([x for x in self.move_log.moves if x is Move.NONE])
 
     def __str__(self):
         return "[{}]".format(self.name)

@@ -105,7 +105,7 @@ class World(object):
         """
         info_score = "res:{:3}".format(agent.resources)
         move = agent.choose_move(self.grid)
-        info_log = "{:2}".format(str(agent.log))
+        info_log = "{:2}".format(str(agent.move_log))
 
         was_valid = self.move(agent, move)
         info_move = "|"
@@ -115,7 +115,7 @@ class World(object):
             info_move += "fail"
             move = Move.NONE
 
-        agent.log.append(move)
+        agent.move_log.append(move)
         info_move += "(%s)" % agent.position
 
         reward, info_reward = self.reward(agent)

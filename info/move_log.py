@@ -6,6 +6,10 @@ from model.moves import Move
 class MoveLog(object):
     moves = ...  # type: List[Move]
 
+    @property
+    def last(self):
+        return str(self.moves[-1])
+
     def __init__(self, limit=30):
         self.moves = []
         self.limit = limit
