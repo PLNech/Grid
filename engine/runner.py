@@ -87,9 +87,8 @@ class Runner(object):
         return done
 
     def rule_hunger(self, world):
-        for agent in world.agents:
-            d10 = randint(1, 10)
-            if d10 == 1:
+        for agent in [a for a in world.agents if a.alive]:
+            if randint(1, 10) == 1:
                 agent.resources -= 1
             if agent.resources == 0:
                 agent.alive = False
