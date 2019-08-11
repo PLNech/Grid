@@ -16,16 +16,17 @@ class Grid(object):
             self.size_x = size_x
             self.size_y = size_y
 
-        self.abundance = abundance
         self.map = []
         self.stats = GridStats(self)
 
-        # Initialize map
+        self.init_map(abundance)
+
+    def init_map(self, abundance):
         for i in range(self.size_y):
             if i == 0 or i == self.size_y - 1:
-                lane = self.wall_lane(self.size_x)
+                lane = Grid.wall_lane(self.size_x)
             else:
-                lane = self.random_lane(self.size_x)
+                lane = Grid.random_lane(self.size_x, abundance)
             self.map.append(lane)
 
     def __getitem__(self, item):
@@ -48,12 +49,13 @@ class Grid(object):
     # endregion
 
     # region Map generation
-    def random_lane(self, size=10):
+    @staticmethod
+    def random_lane(size=10, abundance=0):
         lane = [Cells.WALL_H]
 
         for i in range(1, size - 1):
             d100 = randint(1, 100)
-            if d100 < int(100 * self.abundance):
+            if d100 < int(100 * abundance):
                 cell = Cells.FOOD
             else:
                 cell = Cells.EMPTY
