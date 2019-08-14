@@ -20,6 +20,10 @@ class World(object):
         self.agents = []
         self.grid = Grid()
 
+    @property
+    def alive_agents(self):
+        return [a for a in self.agents if a.alive]
+
     def generate(self, grid_width=20, grid_abundance=.05):
         """
         Generates a new World: a Grid and some Agents.

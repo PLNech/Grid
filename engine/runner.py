@@ -74,7 +74,7 @@ class Runner(object):
 
     def rule_move_agents(self, world):
         done = False
-        for agent in [a for a in world.agents if a.alive]:
+        for agent in world.alive_agents:
             self.log.show("\n%s " % agent)
 
             reward, done, info = world.act(agent)
@@ -87,12 +87,12 @@ class Runner(object):
         return done
 
     def rule_hunger(self, world):
-        for agent in [a for a in world.agents if a.alive]:
+        for agent in world.alive_agents:
             if randint(1, 10) == 1:
                 agent.resources -= 1
             if agent.resources == 0:
                 agent.alive = False
-        return len([a for a in world.agents if a.alive]) == 0
+        return len(world.alive_agents) == 0
 
     def init_world(self):
         world = World()
