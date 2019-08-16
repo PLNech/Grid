@@ -1,4 +1,5 @@
 # from run_world import grid_height, grid_abundance, timeout_pauses, timeout_run
+import copy
 from random import randint
 
 from agents.agent import Agent
@@ -60,13 +61,12 @@ class Runner(object):
         self.log.print("\nDone in %i rounds!" % run_i)
 
     def run_round(self, run_i, world):
-        done = False
-
         self.scr.clear()
         self.log.show("Run %s\n" % run_i)
 
         done = self.rule_move_agents(world)
-        done = self.rule_hunger(world)
+        done = done or self.rule_hunger(world)
+        done = done or self.rule_reproduction(world)
 
         self.log.show("\n\n%s" % world.print_grid())
         self.scr.getch()
@@ -93,6 +93,18 @@ class Runner(object):
             if agent.resources == 0:
                 agent.alive = False
         return len(world.alive_agents) == 0
+
+    def rule_reproduction(self, world):
+        for agent in world.alive_agents:
+            if agent.resources > 20:
+                agent.resources = agent.resources / 2
+
+                clone = copy.copy(agent)  # type: Agent
+                clone.resources = agent.resources / 2
+                clone.name = "%s'" % agent.name
+                world.add_agent(clone)
+
+        return False
 
     def init_world(self):
         world = World()

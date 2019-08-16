@@ -3,7 +3,6 @@ from random import randrange
 from typing import List
 
 from agents.agent import Agent
-from agents.sniper import Sniper
 from agents.wanderer import Wanderer
 from model.cells import Cells
 from model.moves import Move
@@ -35,11 +34,17 @@ class World(object):
         """
         self.grid = Grid(grid_width, abundance=grid_abundance)
 
-        self.add_wanderers(grid_width)
-        self.add_agent(Sniper())
+        # self.add_wanderers(grid_width)
+        # self.add_agent(Sniper())
+        self.add_wealthy_wanderer()
 
         return "Generated map of size %s, %s with %s resources and %s walls:\n\n%s" % (
             grid_width, grid_width, self.grid.stats.resources, self.grid.stats.walls, self.print_grid())
+
+    def add_wealthy_wanderer(self, wealth=1000):
+        wealthy = Wanderer()
+        wealthy.resources = wealth
+        self.add_agent(wealthy)
 
     def add_wanderers(self, grid_width, nb=5):
         for (i, x) in enumerate(string.ascii_uppercase, 1):
@@ -157,7 +162,7 @@ class World(object):
                 cell_str = str(Cells(cell))
                 for agent in self.agents:
                     if i == agent.y and j == agent.x:
-                        cell_str = agent.name
+                        cell_str = agent.name[0]
                 grid_str += cell_str
             grid_str += "\n"
         return grid_str
