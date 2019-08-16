@@ -35,10 +35,8 @@ class Runner(object):
 
         self.run_episode(world)
 
-        len_scores = max([len(str(a.score)) for a in world.agents])
-        len_fails = max([len(str(a.fails)) for a in world.agents])
-        format_score = "{:" + str(len_scores) + "}"
-        format_fails = "{:" + str(len_fails) + "}"
+        format_score = "{:" + str(max([len(str(a.score)) for a in world.agents])) + "}"
+        format_fails = "{:" + str(max([len(str(a.fails)) for a in world.agents])) + "}"
 
         world.agents.sort(key=lambda a: a.resources)
         for agent in world.agents:
