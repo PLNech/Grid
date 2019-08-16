@@ -150,7 +150,7 @@ class World(object):
 
         infos = [str(i) for i in [info_score, info_move, info_reward, info_log]]
         info_str = " | ".join(infos)
-        return reward, self.grid.stats.resources == 0, info_str.format(*infos)
+        return reward, info_str.format(*infos)
 
         pass
 

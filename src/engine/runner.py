@@ -1,9 +1,6 @@
 # from run_world import grid_height, grid_abundance, timeout_pauses, timeout_run
-import copy
-from random import randint
 
-from agents import Agent
-
+from engine.rules import *
 from info import Logger
 from world import World
 
@@ -63,47 +60,14 @@ class Runner(object):
         self.scr.clear()
         self.log.show("Run %s\n" % run_i)
 
-        done = self.rule_move_agents(world)
-        done = done or self.rule_hunger(world)
-        done = done or self.rule_reproduction(world)
+        for rule in [rule_hunger, rule_reproduction, rule_move_agents]:
+            done, show, log = rule(world)
+            self.log.show(show)
+            self.log.log(log)
 
         self.log.show("\n\n%s" % world.print_grid())
         self.scr.getch()
         return done
-
-    def rule_move_agents(self, world):
-        done = False
-        for agent in world.alive_agents:
-            self.log.show("\n%s " % agent)
-
-            reward, done, info = world.act(agent)
-            self.log.log("{}: {} -> {}".format(agent.name, agent.move_log.last, reward))
-            agent.process_reward(reward)
-
-            self.log.show("%s |" % agent.position)
-            if len(info):
-                self.log.show(info)
-        return done
-
-    def rule_hunger(self, world):
-        for agent in world.alive_agents:
-            if randint(1, 10) == 1:
-                agent.resources -= 1
-            if agent.resources == 0:
-                agent.alive = False
-        return len(world.alive_agents) == 0
-
-    def rule_reproduction(self, world):
-        for agent in world.alive_agents:
-            if agent.resources > 20:
-                agent.resources = agent.resources / 2
-
-                clone = copy.copy(agent)  # type: Agent
-                clone.resources = agent.resources / 2
-                clone.name = "%s'" % agent.name
-                world.add_agent(clone)
-
-        return False
 
     def init_world(self):
         world = World()
