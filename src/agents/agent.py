@@ -9,12 +9,16 @@ class Agent(object):
     An autonomous agent acting on a Grid to get rewards.
     """
 
-    def __init__(self, name="P"):
+    def __init__(self, name="P", glyph=None):
         """
         Initialize the agent's default state, before being anywhere on the Grid.
 
         :type name: str
         """
+        if glyph is None:
+            glyph = name[0]
+
+        self.glyph = glyph
         self.name = name
         self.x = 0
         self.y = 0

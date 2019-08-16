@@ -162,7 +162,7 @@ class World(object):
                 cell_str = str(Cells(cell))
                 for agent in self.agents:
                     if i == agent.y and j == agent.x:
-                        cell_str = agent.name[0]
+                        cell_str = agent.glyph
                 grid_str += cell_str
             grid_str += "\n"
         return grid_str

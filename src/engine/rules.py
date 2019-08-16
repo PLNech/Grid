@@ -2,19 +2,11 @@ import copy
 from random import randint
 
 from agents import Agent
+from engine.namer import namer
 
 no_show = ""
 no_log = ""
 default_output = (False, no_show, no_log)
-
-
-class Namer(object):
-
-    def name_child(self, name):
-        return name + "'"
-
-
-namer = Namer()
 
 
 def rule_reproduction(world):
@@ -24,7 +16,7 @@ def rule_reproduction(world):
 
             clone = copy.copy(agent)  # type: Agent
             clone.resources = agent.resources / 2
-            clone.name = namer.name_child(agent.name)
+            clone.glyph, clone.name = namer.name_child(agent.name)
             world.add_agent(clone)
 
     return default_output
