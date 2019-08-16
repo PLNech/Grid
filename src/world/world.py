@@ -2,11 +2,11 @@ import string
 from random import randrange
 from typing import List
 
-from agents.agent import Agent
-from agents.wanderer import Wanderer
-from model.cells import Cells
-from model.moves import Move
-from world.grid import Grid
+from agents import Agent
+from agents import Wanderer
+from model import Cells
+from model import Move
+from .grid import Grid
 
 
 class World(object):

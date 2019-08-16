@@ -1,6 +1,6 @@
 from typing import List
 
-from model.moves import Move
+from model import Move
 
 
 class MoveLog(object):

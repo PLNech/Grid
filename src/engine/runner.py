@@ -2,9 +2,10 @@
 import copy
 from random import randint
 
-from agents.agent import Agent
-from info.logger import Logger
-from world.world import World
+from agents import Agent
+
+from info import Logger
+from world import World
 
 
 class RunnerConfig(object):

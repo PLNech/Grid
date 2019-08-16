@@ -1,4 +1,4 @@
-from agents.wanderer import Wanderer
+from .wanderer import Wanderer
 
 
 class Sniper(Wanderer):

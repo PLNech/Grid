@@ -1,7 +1,7 @@
 from abc import abstractmethod
 
-from info.move_log import MoveLog
-from model.moves import Move
+from info import MoveLog
+from model import Move
 
 
 class Agent(object):

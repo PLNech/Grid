@@ -1,7 +1,7 @@
 from random import randint
 
-from info.stats import GridStats
-from model.cells import Cells
+from info import GridStats
+from model import Cells
 
 
 class Grid(object):

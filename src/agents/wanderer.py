@@ -1,7 +1,7 @@
 from sys import maxsize
 
-from agents.agent import Agent
-from model.cells import Cells
+from agents import Agent
+from model import Cells
 
 
 class Wanderer(Agent):

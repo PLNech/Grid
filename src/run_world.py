@@ -2,7 +2,7 @@
 
 from curses import wrapper
 
-from engine.runner import Runner, RunnerConfig
+from engine import Runner, RunnerConfig
 
 grid_abundance = .05
 grid_height = 20
