@@ -40,7 +40,7 @@ class Runner(object):
             info_score = format_score.format(agent.score)
             info_fails = format_fails.format(agent.fails)
 
-            msg = "\n{} got {} points, failed {} times.".format(agent.name, info_score, info_fails)
+            msg = "\n{:2} got {} points, failed {} times.".format(agent.name, info_score, info_fails)
             self.log.print(msg)
         self.scr.getch()
 
