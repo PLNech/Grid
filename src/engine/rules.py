@@ -38,9 +38,14 @@ def rule_hunger(world):
     for agent in world.alive_agents:
         if randint(1, 10) == 1:
             agent.resources -= 1
-        if agent.resources == 0:
+        if agent.resources <= 0:
             agent.alive = False
-    return len(world.alive_agents) == 0, no_show, no_log
+            agent.resources = 0
+    return default_output
+
+
+def rule_nobody_alive(world):
+    return len(world.alive_agents) == 0, no_log, no_show
 
 
 def rule_move_agents(world):

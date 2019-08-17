@@ -61,7 +61,10 @@ class Runner(object):
         self.scr.clear()
         self.log.show("Run %s\n" % run_i)
 
-        for rule in [rule_hunger, rule_reproduction, rule_move_agents]:
+        for rule in [rule_hunger,
+                     rule_reproduction,
+                     rule_move_agents,
+                     rule_nobody_alive]:
             done, show, log = rule(world)
             self.log.show(show)
             self.log.log(log)
