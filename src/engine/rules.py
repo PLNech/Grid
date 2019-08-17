@@ -4,6 +4,7 @@ from random import randint
 from agents import Agent
 from engine.namer import namer
 
+not_done = False
 no_show = ""
 no_log = ""
 default_output = (False, no_show, no_log)
@@ -11,15 +12,26 @@ default_output = (False, no_show, no_log)
 
 def rule_reproduction(world):
     for agent in world.alive_agents:
-        if agent.resources > 20:
-            agent.resources = agent.resources / 2
-
-            clone = copy.copy(agent)  # type: Agent
-            clone.resources = agent.resources / 2
-            clone.glyph, clone.name = namer.name_child(agent.name)
-            world.add_agent(clone)
-
+        if agent.resources > 10:
+            reproduce(agent, world)
     return default_output
+
+
+def reproduce(agent, world):
+    world.add_agent(create_child(agent), near=agent)
+
+
+def create_child(agent):
+    """
+
+    :type agent: Agent
+    :rtype Agent
+    """
+    clone = copy.copy(agent)  # type: Agent
+    clone.resources = agent.resources / 2
+    agent.resources = agent.resources / 2
+    clone.glyph, clone.name = namer.name_child(agent.name)
+    return clone
 
 
 def rule_hunger(world):

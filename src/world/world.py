@@ -1,8 +1,8 @@
 import string
-from random import randrange
+from random import randrange, randint
 from typing import List
 
-from agents import Agent
+from agents import Agent, Sniper
 from agents import Wanderer
 from model import Cells
 from model import Move
@@ -35,8 +35,8 @@ class World(object):
         self.grid = Grid(grid_width, abundance=grid_abundance)
 
         # self.add_wanderers(grid_width)
-        # self.add_agent(Sniper())
-        self.add_wealthy_wanderer()
+        self.add_agent(Sniper())
+        # self.add_wealthy_wanderer()
 
         return "Generated map of size %s, %s with %s resources and %s walls:\n\n%s" % (
             grid_width, grid_width, self.grid.stats.resources, self.grid.stats.walls, self.print_grid())
@@ -58,14 +58,22 @@ class World(object):
         for a in agents:
             self.add_agent(a)
 
-    def add_agent(self, agent):
+    def add_agent(self, agent, position=None, near=None):
         """
         Adds this agent at a random place on the map.
 
-        :type agent Agent
+        :type near: Agent
+        :type agent: Agent
+        :type position: tuple
         """
-        y = randrange(1, self.grid.size_y - 1)
-        x = randrange(1, self.grid.size_x - 1)
+
+        if near is not None:
+            x, y = self.valid_nearby((near.x, near.y))
+        elif position is not None:
+            x, y = position
+        else:
+            y = randrange(1, self.grid.size_y - 1)
+            x = randrange(1, self.grid.size_x - 1)
 
         self.put(agent, (x, y))
         self.agents.append(agent)
@@ -102,6 +110,22 @@ class World(object):
             agent.x, agent.y = position
             return True
         return False
+
+    def valid_nearby(self, position):
+        """
+        Returns a walkable cell near the given position.
+
+        :param position: The desired position.
+
+        :type position tuple
+        :rtype tuple
+        """
+        x, y = position
+
+        while not self.grid.is_valid((x, y)):
+            x = randint(x - 1, x + 1)
+            y = randint(y - 1, y + 1)
+        return x, y
 
     def reward(self, agent):
         """

@@ -7,7 +7,7 @@ from engine import Runner, RunnerConfig
 grid_abundance = .05
 grid_height = 20
 timeout_pauses = 1000
-timeout_run = 50 if grid_height < 20 else 100
+timeout_run = 50 if grid_height < 20 else 10
 
 
 def main(stdscr):

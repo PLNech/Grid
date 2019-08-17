@@ -1,7 +1,7 @@
 class Namer(object):
     def __init__(self):
         self.count = 0
-        self.symbols = [
+        self.symbols = [  # TODO: Select most visible ones
             u"\u0300",
             u"\u0301",
             u"\u0302",
