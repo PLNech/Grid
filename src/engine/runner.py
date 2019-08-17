@@ -48,6 +48,7 @@ class Runner(object):
         run_i = 0
         done = False
 
+        # namer.reset()
         self.scr.timeout(self.config.timeout_run)
         while not done:
             run_i += 1

@@ -1,6 +1,6 @@
 class Namer(object):
     def __init__(self):
-        self.count = 0
+        self.counts = {}
         self.symbols = [  # TODO: Select most visible ones
             u"\u0300",
             u"\u0301",
@@ -143,6 +143,22 @@ class Namer(object):
             u"\u036F",
         ]
 
+    def reset(self):
+        self.counts = {}
+
+    def next_symbol(self, parent_name):
+        """
+
+        :type parent_name: str
+        """
+        if parent_name in self.counts:
+            self.counts[parent_name] += 1
+        else:
+            self.counts[parent_name] = 1
+
+        index = -self.counts[parent_name] % len(self.symbols)
+        return self.symbols[index]
+
     def name_child(self, parent_name):
         """
          Returns a child's unique fixed-width glyph and its name.
@@ -150,10 +166,9 @@ class Namer(object):
          :type parent_name str
          :rtype tuple
          """
+        glyph = str(parent_name + self.next_symbol(parent_name))
+        name = glyph + str(self.counts[parent_name])
 
-        self.count += 1
-        glyph = str(parent_name + self.symbols[-self.count])
-        name = glyph + str(self.count)
         return glyph, name
 
 
