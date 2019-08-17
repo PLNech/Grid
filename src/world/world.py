@@ -34,12 +34,15 @@ class World(object):
         """
         self.grid = Grid(grid_width, abundance=grid_abundance)
 
-        # self.add_wanderers(grid_width)
-        self.add_agent(Sniper())
-        # self.add_wealthy_wanderer()
+        self.populate()
 
         return "Generated map of size %s, %s with %s resources and %s walls:\n\n%s" % (
             grid_width, grid_width, self.grid.stats.resources, self.grid.stats.walls, self.print_grid())
+
+    def populate(self):
+        self.add_wanderers(self.grid.size_x)
+        self.add_agent(Sniper())
+        # self.add_wealthy_wanderer()
 
     def add_wealthy_wanderer(self, wealth=1000):
         wealthy = Wanderer()
