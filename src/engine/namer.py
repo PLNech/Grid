@@ -166,7 +166,7 @@ class Namer(object):
          :type parent_name str
          :rtype tuple
          """
-        glyph = str(parent_name + self.next_symbol(parent_name))
+        glyph = str(parent_name[0] + self.next_symbol(parent_name))
         name = glyph + str(self.counts[parent_name])
 
         return glyph, name
