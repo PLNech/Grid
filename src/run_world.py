@@ -5,7 +5,7 @@ from curses import wrapper
 from engine import Runner, RunnerConfig
 
 grid_abundance = .05
-grid_height = 20
+grid_height = 10
 timeout_pauses = 1000
 timeout_run = 50 if grid_height < 20 else 10
 

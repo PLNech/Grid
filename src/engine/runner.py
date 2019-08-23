@@ -64,8 +64,9 @@ class Runner(object):
         for rule in [rule_hunger,
                      rule_reproduction,
                      rule_move_agents,
+                     rule_last_alive,
                      rule_nobody_alive]:
-            done, show, log = rule(world)
+            done, show, log = rule(world)  # TODO: done OR done
             self.log.show(show)
             self.log.log(log)
 

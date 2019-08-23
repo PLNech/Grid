@@ -48,6 +48,14 @@ def rule_nobody_alive(world):
     return len(world.alive_agents) == 0, no_log, no_show
 
 
+def rule_last_alive(world):
+    if len(world.alive_agents) == 1:
+        last_mohican = world.alive_agents[0]  # type: Agent
+        last_mohican.resources = 20
+
+    return len(world.alive_agents) == 1, no_log, no_show
+
+
 def rule_move_agents(world):
     """
     Let each agent make one move.
