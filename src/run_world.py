@@ -4,7 +4,7 @@ from curses import wrapper
 
 from engine import Runner, RunnerConfig
 
-grid_abundance = .05
+default_abundance = .05
 default_grid_height = 10
 default_pauses = 1000
 default_timeout = 50 if default_grid_height < 20 else 10
@@ -12,7 +12,7 @@ default_timeout = 50 if default_grid_height < 20 else 10
 
 def main(stdscr):
     config = RunnerConfig(args.height,
-                          grid_abundance,
+                          args.abundance,
                           args.pause,
                           args.timeout)
     runner = Runner(stdscr, config)
@@ -24,6 +24,9 @@ if __name__ == "__main__":
     parser.add_argument("-H", "--height", type=int, default=default_grid_height,
                         metavar="21",
                         help="The height of the square grid.")
+    parser.add_argument("-a", "--abundance", type=float, default=default_abundance,
+                        metavar=".1",
+                        help="The abundance of resources on the grid.")
     parser.add_argument("-p", "--pause", type=int, default=default_pauses,
                         metavar="1000",
                         help="Pause in milliseconds at map generation and death.")
