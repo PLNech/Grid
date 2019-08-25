@@ -3,6 +3,7 @@ from random import randint
 
 from agents import Agent
 from engine.namer import namer
+from model import Move
 
 
 class RuleOutput(object):
@@ -12,6 +13,48 @@ class RuleOutput(object):
         self.done = done
         self.show = show
         self.log = log
+
+
+def make_agents_act(world):
+    """
+    Let each agent make one move.
+
+    :param world: The world where the rule applies.
+    :return: done if done, show for UI and log for logs.
+
+    :rtype tuple(bool, str, str)
+    """
+    show = ""
+    log = ""
+
+    for agent in world.alive_agents:
+        show += "\n%s " % agent
+
+        reward, info = world.act(agent)
+        log = "{}: {} -> {}".format(agent.name, agent.move_log.last, reward)
+        agent.process_reward(reward)
+
+        show += "%s |" % agent.position
+        if len(info):
+            show += info
+    return RuleOutput(show=show, log=log)
+
+
+def make_agents_hungry(world):
+    """
+    Agents are hungry, losing resources at a random yet regular rate.
+
+    :rtype: RuleOutput
+    """
+    for agent in world.alive_agents:
+        # Hungry because the agent just moved, else once in a while
+        if len(agent.move_log) and agent.move_log[-1] is Move.NONE or randint(1, 10) == 1:
+            agent.resources -= 1
+            # Being hungry with an empty stomach doesn't help in this savage grid world
+            if agent.resources <= 0:
+                agent.alive = False
+                agent.resources = 0
+    return RuleOutput()
 
 
 def make_agents_reproduce(world):
@@ -40,37 +83,6 @@ def create_child(agent):
     return clone
 
 
-def make_agents_hungry(world):
-    """
-    Agents are hungry, losing resources at a random yet regular rate.
-
-    :rtype: RuleOutput
-    """
-    for agent in world.alive_agents:
-        if randint(1, 10) == 1:
-            agent.resources -= 1
-        if agent.resources <= 0:
-            agent.alive = False
-            agent.resources = 0
-    return RuleOutput()
-
-
-def done_if_nobody_alive(world):
-    """
-    The world stops if nobody is alive.
-    :rtype: RuleOutput
-    """
-    return RuleOutput(len(world.alive_agents) == 0)
-
-
-def done_if_no_resources(world):
-    """
-    The world stops if it is empty of resources.
-    :rtype: RuleOutput
-    """
-    return RuleOutput(world.grid.stats.resources == 0)
-
-
 def make_last_alive_mohican(world):
     """
     The last agent alive gets 20 resources.
@@ -89,26 +101,17 @@ def make_last_alive_mohican(world):
     return RuleOutput(show=show, log=log)
 
 
-def make_agents_act(world):
+def done_if_nobody_alive(world):
     """
-    Let each agent make one move.
-
-    :param world: The world where the rule applies.
-    :return: done if done, show for UI and log for logs.
-
-    :rtype tuple(bool, str, str)
+    The world stops if nobody is alive.
+    :rtype: RuleOutput
     """
-    show = ""
-    log = ""
+    return RuleOutput(len(world.alive_agents) == 0)
 
-    for agent in world.alive_agents:
-        show += "\n%s " % agent
 
-        reward, info = world.act(agent)
-        log = "{}: {} -> {}".format(agent.name, agent.move_log.last, reward)
-        agent.process_reward(reward)
-
-        show += "%s |" % agent.position
-        if len(info):
-            show += info
-    return RuleOutput(show=show, log=log)
+def done_if_no_resources(world):
+    """
+    The world stops if it is empty of resources.
+    :rtype: RuleOutput
+    """
+    return RuleOutput(world.grid.stats.resources == 0)
