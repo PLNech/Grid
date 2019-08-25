@@ -40,9 +40,19 @@ class World(object):
             grid_width, grid_width, self.grid.stats.resources, self.grid.stats.walls, self.print_grid())
 
     def populate(self):
-        self.add_wanderers(self.grid.size_x)
-        self.add_agent(Sniper())
-        # self.add_wealthy_wanderer()
+        self.pop_gleaners(5)
+        self.pop_sniper()
+        # self.pop_bourgeoisie()
+
+    def pop_bourgeoisie(self):
+        self.add_wealthy_wanderer()
+
+    def pop_gleaners(self, nb=5):
+        self.add_wanderers(self.grid.size_x, nb)
+
+    def pop_sniper(self, nb=1):
+        for a in [Sniper()] * nb:
+            self.add_agent(a)
 
     def add_wealthy_wanderer(self, wealth=1000):
         wealthy = Wanderer()
