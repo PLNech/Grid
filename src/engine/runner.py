@@ -58,6 +58,8 @@ class Runner(object):
 
     def run_round(self, run_i, world):
         done = False
+        show = ""
+        log = ""
         rules = [make_agents_hungry,
                  make_agents_reproduce,
                  make_agents_act,
@@ -65,18 +67,21 @@ class Runner(object):
                  done_if_nobody_alive,
                  done_if_no_resources]
 
-        self.scr.clear()
-        self.log.show("Run %s\n\n%s" % (run_i, world.print_grid()))
-
         for rule in rules:
             output = rule(world)
             done = done or output.done
             if output.show:
-                self.log.show(output.show)
+                show += output.show
             if output.log:
-                self.log.log(output.log)
+                log += output.log
 
+        self.scr.clear()
+        self.log.show("Run %s\n\n%s" % (run_i, world.print_grid()))
+        self.log.show(show)
         self.scr.getch()
+
+        if len(log):
+            self.log.log(log)
         return done
 
     def init_world(self):
