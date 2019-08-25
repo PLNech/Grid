@@ -8,7 +8,7 @@ from engine.namer import namer
 class RuleOutput(object):
     """ Output of a rule: should we stop the run? Anything to show or to log?"""
 
-    def __init__(self, done=False, show="", log=""):
+    def __init__(self, done=False, show=None, log=None):
         self.done = done
         self.show = show
         self.log = log

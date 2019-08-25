@@ -71,8 +71,10 @@ class Runner(object):
         for rule in rules:
             output = rule(world)
             done = done or output.done
-            self.log.show(output.show)
-            self.log.log(output.log)
+            if output.show:
+                self.log.show(output.show)
+            if output.log:
+                self.log.log(output.log)
 
         self.log.show("\n\n%s" % world.print_grid())
         self.scr.getch()
