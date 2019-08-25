@@ -66,7 +66,7 @@ class Runner(object):
                  done_if_no_resources]
 
         self.scr.clear()
-        self.log.show("Run %s\n" % run_i)
+        self.log.show("Run %s\n\n%s" % (run_i, world.print_grid()))
 
         for rule in rules:
             output = rule(world)
@@ -76,7 +76,6 @@ class Runner(object):
             if output.log:
                 self.log.log(output.log)
 
-        self.log.show("\n\n%s" % world.print_grid())
         self.scr.getch()
         return done
 

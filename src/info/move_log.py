@@ -17,6 +17,12 @@ class MoveLog(object):
     def append(self, move):
         self.moves.append(move)
 
+    def __getitem__(self, item):
+        return self.moves.__getitem__(item)
+
+    def __len__(self):
+        return len(self.moves)
+
     def __str__(self):
         moves_str = [str(m) for m in self.moves[-self.limit:]]
         return " ".join(moves_str)

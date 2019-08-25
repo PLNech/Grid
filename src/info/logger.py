@@ -1,3 +1,4 @@
+import _curses
 import logging
 import os
 from datetime import datetime
@@ -26,7 +27,10 @@ class Logger(object):
         self.log(msg.strip("\n"), lvl)
 
     def show(self, msg):
-        self.scr.addstr(msg)
+        try:
+            self.scr.addstr(msg)
+        except _curses.error:
+            pass
 
     def log(self, msg="", lvl=logging.DEBUG):
         logging.log(lvl, msg)
