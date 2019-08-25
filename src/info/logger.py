@@ -4,7 +4,6 @@ from datetime import datetime
 
 
 class Logger(object):
-
     def __init__(self, stdscr) -> None:
         if not os.path.exists("logs"):
             os.makedirs("logs")

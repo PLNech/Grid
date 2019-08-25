@@ -2,7 +2,6 @@ from model import Cells
 
 
 class GridStats(object):
-
     def __init__(self, grid):
         self.grid = grid
 

@@ -4,21 +4,27 @@ from random import randint
 from agents import Agent
 from engine.namer import namer
 
-not_done = False
-no_show = ""
-no_log = ""
-default_output = (False, no_show, no_log)
+
+class RuleOutput(object):
+    """ Output of a rule: should we stop the run? Anything to show or to log?"""
+
+    def __init__(self, done=False, show="", log=""):
+        self.done = done
+        self.show = show
+        self.log = log
 
 
-def rule_reproduction(world):
-    for agent in world.alive_agents:
-        if agent.resources > 10:
-            reproduce(agent, world)
-    return default_output
+def make_agents_reproduce(world):
+    """
+    Agents can reproduce, making a child if they have enough resources.
 
-
-def reproduce(agent, world):
-    world.add_agent(create_child(agent), near=agent)
+    :rtype: RuleOutput
+    """
+    for agent in world.alive_agents:  # type: Agent
+        if agent.resources > 20:
+            if agent.choose_to_reproduce():
+                world.add_agent(create_child(agent), near=agent)
+    return RuleOutput()
 
 
 def create_child(agent):
@@ -34,29 +40,56 @@ def create_child(agent):
     return clone
 
 
-def rule_hunger(world):
+def make_agents_hungry(world):
+    """
+    Agents are hungry, losing resources at a random yet regular rate.
+
+    :rtype: RuleOutput
+    """
     for agent in world.alive_agents:
         if randint(1, 10) == 1:
             agent.resources -= 1
         if agent.resources <= 0:
             agent.alive = False
             agent.resources = 0
-    return default_output
+    return RuleOutput()
 
 
-def rule_nobody_alive(world):
-    return len(world.alive_agents) == 0, no_log, no_show
+def done_if_nobody_alive(world):
+    """
+    The world stops if nobody is alive.
+    :rtype: RuleOutput
+    """
+    return RuleOutput(len(world.alive_agents) == 0)
 
 
-def rule_last_alive(world):
+def done_if_no_resources(world):
+    """
+    The world stops if it is empty of resources.
+    :rtype: RuleOutput
+    """
+    return RuleOutput(world.grid.stats.resources == 0)
+
+
+def make_last_alive_mohican(world):
+    """
+    The last agent alive gets 20 resources.
+
+    :rtype: RuleOutput
+    """
+    log = ""
+    show = ""
     if len(world.alive_agents) == 1:
         last_mohican = world.alive_agents[0]  # type: Agent
-        last_mohican.resources = 20
+        bonus = 20
+        last_mohican.resources += bonus
+        log = "Last mohican got %i resources (-> %i)!" % (bonus, last_mohican.resources)
+        show = "MOHICAN!"
 
-    return len(world.alive_agents) == 1, no_log, no_show
+    return RuleOutput(show=show, log=log)
 
 
-def rule_move_agents(world):
+def make_agents_act(world):
     """
     Let each agent make one move.
 
@@ -78,4 +111,4 @@ def rule_move_agents(world):
         show += "%s |" % agent.position
         if len(info):
             show += info
-    return world.grid.stats.resources == 0, show, log
+    return RuleOutput(show=show, log=log)

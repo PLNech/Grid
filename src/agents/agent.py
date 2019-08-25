@@ -48,6 +48,14 @@ class Agent(object):
     def choose_move(self, grid):
         return self.x, self.y
 
+    def choose_to_reproduce(self):
+        """
+        Return true if the agent currently wants to reproduce, given an opportunity to.
+
+        :rtype: bool
+        """
+        return True
+
     # endregion
 
     def move_towards(self, position):

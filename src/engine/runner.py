@@ -6,7 +6,7 @@ from world import World
 
 
 class RunnerConfig(object):
-    def __init__(self, height=20, abundance=.05, timeout_pauses=1000, timeout_run=0) -> None:
+    def __init__(self, height=20, abundance=.1, timeout_pauses=1000, timeout_run=0) -> None:
         self.abundance = abundance
         self.height = height
         self.timeout_run = timeout_run
@@ -14,7 +14,6 @@ class RunnerConfig(object):
 
 
 class Runner(object):
-
     def __init__(self, stdscr, config=RunnerConfig()) -> None:
         self.config = config
         self.scr = stdscr
@@ -58,17 +57,22 @@ class Runner(object):
         self.log.print("\nDone in %i rounds!" % run_i)
 
     def run_round(self, run_i, world):
+        done = False
+        rules = [make_agents_hungry,
+                 make_agents_reproduce,
+                 make_agents_act,
+                 make_last_alive_mohican,
+                 done_if_nobody_alive,
+                 done_if_no_resources]
+
         self.scr.clear()
         self.log.show("Run %s\n" % run_i)
 
-        for rule in [rule_hunger,
-                     rule_reproduction,
-                     rule_move_agents,
-                     rule_last_alive,
-                     rule_nobody_alive]:
-            done, show, log = rule(world)  # TODO: done OR done
-            self.log.show(show)
-            self.log.log(log)
+        for rule in rules:
+            output = rule(world)
+            done = done or output.done
+            self.log.show(output.show)
+            self.log.log(output.log)
 
         self.log.show("\n\n%s" % world.print_grid())
         self.scr.getch()
