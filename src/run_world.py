@@ -1,20 +1,35 @@
 #! /usr/bin/env python
-
+import argparse
 from curses import wrapper
 
 from engine import Runner, RunnerConfig
 
 grid_abundance = .05
-grid_height = 10
-timeout_pauses = 1000
-timeout_run = 50 if grid_height < 20 else 10
+default_grid_height = 10
+default_pauses = 1000
+default_timeout = 50 if default_grid_height < 20 else 10
 
 
 def main(stdscr):
-    config = RunnerConfig(grid_height, grid_abundance, timeout_pauses, timeout_run)
+    config = RunnerConfig(args.height,
+                          grid_abundance,
+                          args.pause,
+                          args.timeout)
     runner = Runner(stdscr, config)
     runner.run_infinite()
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="A grid world where agents thrive and survive.")
+    parser.add_argument("-H", "--height", type=int, default=default_grid_height,
+                        metavar="21",
+                        help="The height of the square grid.")
+    parser.add_argument("-p", "--pause", type=int, default=default_pauses,
+                        metavar="1000",
+                        help="Pause in milliseconds at map generation and death.")
+    parser.add_argument("-t", "--timeout", type=int, default=default_timeout,
+                        metavar="10",
+                        help="Pause between each round of actions.")
+    args = parser.parse_args()
+    print(args.height)
     wrapper(main)

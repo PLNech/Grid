@@ -36,7 +36,7 @@ class World(object):
 
         self.populate()
 
-        return "Generated map of size %s, %s with %s resources and %s walls:\n\n%s" % (
+        return "Generated map of size %s/%s with %s resources and %s walls:\n\n%s" % (
             grid_width, grid_width, self.grid.stats.resources, self.grid.stats.walls, self.print_grid())
 
     def populate(self):
