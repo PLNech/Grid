@@ -11,7 +11,7 @@ class Grid(object):
 
     def __init__(self, size_x=10, size_y=None, abundance=.1):
         if size_y is None:
-            self.size_x, self.size_y = size_x * 2, size_x
+            self.size_x, self.size_y = size_x * 4, size_x
         else:
             self.size_x = size_x
             self.size_y = size_y
