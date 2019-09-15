@@ -44,9 +44,10 @@ def make_agents_hungry(world):
     """
     Agents are hungry, losing resources at a random yet regular rate.
 
+    :type world: World
     :rtype: RuleOutput
     """
-    for agent in world.alive_agents:
+    for agent in world.alive_agents:  # type: Agent
         # Hungry because the agent just moved, else once in a while
         if len(agent.move_log) and agent.move_log[-1] is Move.NONE or randint(1, 10) == 1:
             agent.resources -= 1
@@ -61,6 +62,7 @@ def make_agents_reproduce(world):
     """
     Agents can reproduce, making a child if they have enough resources.
 
+    :type world: World
     :rtype: RuleOutput
     """
     for agent in world.alive_agents:  # type: Agent
@@ -87,6 +89,7 @@ def make_last_alive_mohican(world):
     """
     The last agent alive gets 20 resources.
 
+    :type world: World
     :rtype: RuleOutput
     """
     log = ""
@@ -104,6 +107,8 @@ def make_last_alive_mohican(world):
 def done_if_nobody_alive(world):
     """
     The world stops if nobody is alive.
+
+    :type world: World
     :rtype: RuleOutput
     """
     return RuleOutput(len(world.alive_agents) == 0)
@@ -112,6 +117,8 @@ def done_if_nobody_alive(world):
 def done_if_no_resources(world):
     """
     The world stops if it is empty of resources.
+
+    :type world: World
     :rtype: RuleOutput
     """
     return RuleOutput(world.grid.stats.resources == 0)
