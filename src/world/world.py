@@ -166,16 +166,15 @@ class World(object):
         :param agent: Agent
         :return: reward, done, info.
         """
-        info_score = "res:{:3}".format(agent.resources)
+        info_score = "{:5.1f} res".format(float(agent.resources))
         move = agent.choose_move(self.grid)
         info_log = "{:2}".format(str(agent.move_log))
 
         was_valid = self.move(agent, move)
-        info_move = "|"
         if was_valid:
-            info_move += "move"
+            info_move = "move"
         else:
-            info_move += "fail"
+            info_move = "fail"
             move = Move.NONE
 
         agent.move_log.append(move)

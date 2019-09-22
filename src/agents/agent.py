@@ -79,4 +79,4 @@ class Agent(object):
 
     @property
     def position(self):
-        return "{:02},{:02}".format(self.x, self.y)
+        return "{:3},{:3}".format(self.x, self.y)
