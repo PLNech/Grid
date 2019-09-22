@@ -1,7 +1,10 @@
 from abc import abstractmethod
 
+from engine.namer import Namer
 from info import MoveLog
 from model import Move
+
+namer = Namer()
 
 
 class Agent(object):
@@ -19,7 +22,7 @@ class Agent(object):
             glyph = name[0]
 
         self.glyph = glyph
-        self.name = name
+        self.name = name + namer.next_symbol(name)
         self.x = 0
         self.y = 0
         self.alive = True
