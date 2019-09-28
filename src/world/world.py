@@ -27,23 +27,22 @@ class World(object):
     def alive_agents(self):
         return [a for a in self.agents if a.alive]
 
-    def generate(self, grid_width=20, grid_abundance=.05, grid_plants=1):
+    def generate(self, config):
         """
         Generates a new World: a Grid and some Agents.
 
-        :param grid_width: The width of the grid. Height is inferred.
-        :param grid_abundance: How abundant resources are.
-        :param grid_plants: How many plants to start with.
+        :type config: RunnerConfig
+        :param config: Configuration to apply.
 
         :return: the genesis info.
         """
-        self.grid = Grid(grid_width, abundance=grid_abundance)
+        self.grid = Grid(config.height, config.width, abundance=config.abundance)
 
         self.populate()
-        self.seed(grid_plants)
+        self.seed(config.init_plants)
 
         return "Generated map of size %s/%s with %s resources and %s walls:\n\n%s" % (
-            grid_width, grid_width, self.grid.stats.resources, self.grid.stats.walls, self.print_grid())
+            config.height, config.width, self.grid.stats.resources, self.grid.stats.walls, self.print_grid())
 
     def populate(self):
         # self.pop_gleaners(0)

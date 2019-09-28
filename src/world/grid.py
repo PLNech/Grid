@@ -1,5 +1,6 @@
+from math import floor
 from random import randint
-from typing import List, Any
+from typing import List
 
 from info import GridStats
 from model import Cells
@@ -13,7 +14,7 @@ class Grid(object):
 
     def __init__(self, size_x=10, size_y=None, abundance=.1):
         if size_y is None:
-            self.size_x, self.size_y = size_x * 4, size_x
+            self.size_x, self.size_y = floor(size_x * 2), size_x
         else:
             self.size_x = size_x
             self.size_y = size_y
@@ -73,7 +74,7 @@ class Grid(object):
         for i in range(1, size - 1):
             d100 = randint(1, 100)
             if d100 < int(100 * abundance):
-                cell = Cells.FOOD
+                cell = Cells.FOOD  # TODO: Replace with plants
             else:
                 cell = Cells.EMPTY
             lane.append(cell)

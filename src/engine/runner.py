@@ -7,10 +7,13 @@ from world import World
 
 class RunnerConfig(object):
     def __init__(self,
-                 height=20, abundance=.1, init_plants=1,
+                 height=20,
+                 width=None,
+                 abundance=.1, init_plants=1,
                  timeout_pauses=5000, timeout_run=0) -> None:
         self.abundance = abundance
         self.height = height
+        self.width = width
         self.init_plants = init_plants
         self.timeout_run = timeout_run
         self.timeout_pauses = timeout_pauses
@@ -91,7 +94,7 @@ class Runner(object):
 
     def init_world(self):
         world = World()
-        info = world.generate(self.config.height, self.config.abundance, self.config.init_plants)
+        info = world.generate(self.config)
 
         self.log.print(info)
         self.scr.timeout(self.config.timeout_pauses)
