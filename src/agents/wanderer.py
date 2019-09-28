@@ -1,7 +1,8 @@
 from sys import maxsize
+from typing import List, Tuple
 
 from agents import Agent
-from model import Cells
+from info import Logger
 
 
 class Wanderer(Agent):
@@ -28,25 +29,32 @@ class Wanderer(Agent):
 
     def analyze_resources(self, resources):
         nearest = -1, -1
+        max_value = 0
         min_distance = maxsize
 
         if len(resources):
-            for r_x, r_y in resources:
-                distance = abs(self.x - r_x) + abs(self.y - r_y)
-                if distance < min_distance:
-                    min_distance = distance
-                    nearest = r_x, r_y
+            Logger.get().info("%i res to analyze." % len(resources))
+            for r_x, r_y, value in resources:
+                Logger.get().info("Current best target worth %i." % max_value)
+                if max_value <= value:  # Check all resources worth max_value
+                    Logger.get().info("new best resource: %i [%i,%i]" % (value, r_x, r_y))
+                    max_value = value
+                    distance = abs(self.x - r_x) + abs(self.y - r_y)
+                    if distance < min_distance:  # Keep the closest max_value as target
+                        Logger.get().info("new target: %i [%i, %i] (%i)" % (value, r_x, r_y, distance))
+                        min_distance = distance
+                        nearest = r_x, r_y
         return min_distance, nearest
 
     def spot_resources(self, grid):
         """
 
         :type grid: Grid
+        :rtype
         """
-        resources = []
+        resources = []  # type: List[Tuple[int, int, int]]
         min_visible_x = -1
         max_visible_x = -1
-
         min_visible_y = max(0, self.y - self.sight)
         max_visible_y = min(self.y + self.sight, grid.size_y)
 
@@ -55,6 +63,7 @@ class Wanderer(Agent):
             max_visible_x = min(self.x + self.sight, grid.size_x)
 
             for x in range(min_visible_x, max_visible_x):
-                if grid[y][x] == Cells.FOOD.value:
-                    resources.append((x, y))
+                value_cell = grid.resources[y][x]  # type: int
+                if value_cell > 0:
+                    resources.append((x, y, value_cell))
         return resources, "s[{} {}]/[{} {}]".format(min_visible_x, max_visible_x, min_visible_y, max_visible_y)

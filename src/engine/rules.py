@@ -1,9 +1,12 @@
 import copy
+from math import floor
 from random import randint
 
 from agents import Agent
 from engine.namer import namer
 from model import Move
+
+VALUE_AGENT_COMPOST = 9
 
 
 class RuleOutput(object):
@@ -54,7 +57,7 @@ def make_agents_hungry(world):
             # Being hungry with an empty stomach doesn't help in this savage grid world
             if agent.resources <= 0:
                 agent.alive = False
-                world.grid.add_resource(agent.x, agent.y, agent.resources)
+                world.grid.add_resource(agent.x, agent.y, VALUE_AGENT_COMPOST)
                 agent.resources = 0
     return RuleOutput()
 
@@ -80,8 +83,8 @@ def create_child(agent):
     :rtype Agent
     """
     clone = copy.copy(agent)  # type: Agent
-    clone.resources = agent.resources / 2
-    agent.resources = agent.resources / 2
+    clone.resources = floor(agent.resources / 2)
+    agent.resources = clone.resources
     clone.glyph, clone.name = namer.name_child(agent.name)
     return clone
 

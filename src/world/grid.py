@@ -1,4 +1,5 @@
 from random import randint
+from typing import List, Any
 
 from info import GridStats
 from model import Cells
@@ -8,6 +9,7 @@ class Grid(object):
     """
     A bidimensional world where agents survive and may thrive.
     """
+    resources = ...  # type: List[List[int]]
 
     def __init__(self, size_x=10, size_y=None, abundance=.1):
         if size_y is None:

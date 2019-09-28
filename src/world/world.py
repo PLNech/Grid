@@ -150,13 +150,9 @@ class World(object):
         :rtype int
         """
 
-        info = "none"
-        reward = 0
         x, y = agent.x, agent.y
-        if self.grid[y][x] == Cells.FOOD.value:
-            info = "food"
-            reward = 1
-            self.grid[y][x] = Cells.CRUMBS.value
+        reward = self.grid.get_resource(x, y)
+        info = "none" if reward is 0 else "food"
         return reward, info
 
     def act(self, agent):
@@ -166,7 +162,7 @@ class World(object):
         :param agent: Agent
         :return: reward, done, info.
         """
-        info_score = "{:5.1f} res".format(float(agent.resources))
+        info_score = "{:3} res".format(agent.resources)
         move = agent.choose_move(self.grid)
         info_log = "{:2}".format(str(agent.move_log))
 
@@ -197,7 +193,9 @@ class World(object):
         for i, lane in enumerate(content):
             for j, cell in enumerate(lane):
                 cell_str = str(cell if show_resources else Cells(cell))
-                for agent in self.agents:
+                if cell_str == "0":
+                    cell_str = " "
+                for agent in self.alive_agents:
                     if i == agent.y and j == agent.x:
                         cell_str = agent.glyph
                 grid_str += cell_str

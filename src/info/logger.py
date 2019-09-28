@@ -9,7 +9,7 @@ class Logger(object):
         if not os.path.exists("logs"):
             os.makedirs("logs")
 
-        self.logger = logging.getLogger("grid_world")
+        self.logger = self.get()
         logging.basicConfig(filename=datetime.now().strftime('logs/%Y_%m_%d-%H:%M.log'),
                             filemode="w+",
                             level=logging.DEBUG,
@@ -21,6 +21,10 @@ class Logger(object):
         logging.addLevelName(logging.WARNING, '[W]')
         logging.addLevelName(logging.ERROR, '[E]')
         self.scr = stdscr
+
+    @staticmethod
+    def get():
+        return logging.getLogger("grid_world")
 
     def print(self, msg="", lvl=logging.DEBUG):
         self.show(msg)

@@ -63,9 +63,8 @@ class Runner(object):
         rules = [make_agents_hungry,
                  make_agents_reproduce,
                  make_agents_act,
-                 make_last_alive_mohican,
-                 done_if_nobody_alive,
-                 done_if_no_resources]
+                 # make_last_alive_mohican,
+                 done_if_nobody_alive]
 
         for rule in rules:
             output = rule(world)
