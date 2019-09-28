@@ -1,10 +1,11 @@
 import string
-from random import randrange, randint
+from random import randrange
 from typing import List
 
 from agents import Agent, Sniper
 from agents import Wanderer
 from agents.plant import Plant
+from info import Logger
 from model import Cells
 from model import Move
 from .grid import Grid
@@ -26,19 +27,20 @@ class World(object):
     def alive_agents(self):
         return [a for a in self.agents if a.alive]
 
-    def generate(self, grid_width=20, grid_abundance=.05):
+    def generate(self, grid_width=20, grid_abundance=.05, grid_plants=1):
         """
         Generates a new World: a Grid and some Agents.
 
         :param grid_width: The width of the grid. Height is inferred.
         :param grid_abundance: How abundant resources are.
+        :param grid_plants: How many plants to start with.
 
         :return: the genesis info.
         """
         self.grid = Grid(grid_width, abundance=grid_abundance)
 
         self.populate()
-        self.seed()
+        self.seed(grid_plants)
 
         return "Generated map of size %s/%s with %s resources and %s walls:\n\n%s" % (
             grid_width, grid_width, self.grid.stats.resources, self.grid.stats.walls, self.print_grid())
@@ -59,9 +61,10 @@ class World(object):
         for a in [Sniper()] * nb:
             self.add_agent(a)
 
-    def seed(self, nb_plants=10):
+    def seed(self, nb_plants=1):
         for i in range(nb_plants):
             self.add_plant()
+        Logger.get().error("%i plants added." % len(self.plants))
 
     def add_wealthy_wanderer(self, wealth=1000):
         wealthy = Wanderer()
@@ -89,17 +92,21 @@ class World(object):
         """
 
         x, y = self.position_entity(near)
-
-        self.put(agent, (x, y))
-        self.agents.append(agent)
+        if x != -1:
+            self.put(agent, (x, y))
+            self.agents.append(agent)
         return agent
 
-    def position_entity(self, near):
+    def position_entity(self, near, no_agent=True, no_plant=False):
         if near is not None:
             x, y = self.valid_nearby((near.x, near.y))
         else:
             y = randrange(1, self.grid.size_y - 1)
             x = randrange(1, self.grid.size_x - 1)
+        is_plant = len([p for p in self.plants if p.x == x and p.y == y]) > 0
+        is_agent = len([a for a in self.agents if a.x == x and a.y == y]) > 0
+        if no_plant and is_plant or no_agent and is_agent:
+            x, y = -1, -1
         return x, y
 
     def add_plant(self, near=None):
@@ -108,11 +115,10 @@ class World(object):
         :type near: Plant
         :rtype tuple(int, int)
         """
-        x, y = self.position_entity(near)
-        plant = Plant(x=x, y=y)
-        self.plants.append(plant)
-
-        return x, y
+        x, y = self.position_entity(near, no_plant=True)
+        if x != -1:
+            plant = Plant(x=x, y=y)
+            self.plants.append(plant)
 
     def move(self, agent, move):
         """
@@ -148,7 +154,7 @@ class World(object):
 
     def valid_nearby(self, position):
         """
-        Returns a walkable cell near the given position.
+        Returns a walkable cell near the given position, or -1,-1 if none.
 
         :param position: The desired position.
 
@@ -156,11 +162,15 @@ class World(object):
         :rtype tuple
         """
         pos_x, pos_y = position
-        x, y = position
-
-        while x == pos_x or y == pos_y or not self.grid.is_valid((x, y)):
-            x = randint(x - 1, x + 1)
-            y = randint(y - 1, y + 1)
+        x, y = pos_x, pos_y + 1  # Right
+        if not self.grid.is_valid((x, y)):
+            x, y = pos_x, pos_y - 1  # Left
+        if not self.grid.is_valid((x, y)):
+            x, y = pos_x + 1, pos_y  # Up
+        if not self.grid.is_valid((x, y)):
+            x, y = pos_x - 1, pos_y  # Down
+        if not self.grid.is_valid((x, y)):
+            x, y = -1, -1
         return x, y
 
     def reward(self, agent):

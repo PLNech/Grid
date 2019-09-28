@@ -8,11 +8,13 @@ default_abundance = .05
 default_grid_height = 10
 default_pauses = 1000
 default_timeout = 50 if default_grid_height < 20 else 10
+default_plants = 0
 
 
 def main(stdscr):
     config = RunnerConfig(args.height,
                           args.abundance,
+                          args.plants,
                           args.pause,
                           args.timeout)
     runner = Runner(stdscr, config)
@@ -27,7 +29,10 @@ if __name__ == "__main__":
     parser.add_argument("-a", "--abundance", type=float, default=default_abundance,
                         metavar=".1",
                         help="The abundance of resources on the grid.")
-    parser.add_argument("-p", "--pause", type=int, default=default_pauses,
+    parser.add_argument("-p", "--plants", type=int, default=default_plants,
+                        metavar="1",
+                        help="How many plants on the initial grid.")
+    parser.add_argument("-P", "--pause", type=int, default=default_pauses,
                         metavar="1000",
                         help="Pause in milliseconds at map generation and death.")
     parser.add_argument("-t", "--timeout", type=int, default=default_timeout,
