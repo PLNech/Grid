@@ -6,7 +6,7 @@ from agents import Agent
 from engine.namer import namer
 from model import Move
 
-VALUE_AGENT_COMPOST = 9
+VALUE_AGENT_COMPOST = 10
 
 
 class RuleOutput(object):

@@ -6,7 +6,7 @@ from world import World
 
 
 class RunnerConfig(object):
-    def __init__(self, height=20, abundance=.1, timeout_pauses=1000, timeout_run=0) -> None:
+    def __init__(self, height=20, abundance=.1, timeout_pauses=5000, timeout_run=0) -> None:
         self.abundance = abundance
         self.height = height
         self.timeout_run = timeout_run
