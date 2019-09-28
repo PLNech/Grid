@@ -12,7 +12,7 @@ class Logger(object):
         self.logger = self.get()
         logging.basicConfig(filename=datetime.now().strftime('logs/%Y_%m_%d-%H:%M.log'),
                             filemode="w+",
-                            level=logging.DEBUG,
+                            level=logging.INFO,
                             format='%(asctime)s,%(msecs)d %(levelname)s %(message)s',
                             datefmt='%H:%M:%S',
                             )

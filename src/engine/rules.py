@@ -4,6 +4,7 @@ from random import randint
 
 from agents import Agent
 from engine.namer import namer
+from info import Logger
 from model import Move
 
 VALUE_AGENT_COMPOST = 10
@@ -16,6 +17,32 @@ class RuleOutput(object):
         self.done = done
         self.show = show
         self.log = log
+
+
+def make_plants_grow(world):
+    """
+    Grow plants until they reach their apex size.
+
+    :param world: The world where the rule applies.
+    :return: done if done, show for UI and log for logs.
+
+    :rtype tuple(bool, str, str)
+    """
+    weather = randint(0, 2)  # Either rainy, covered or sunny
+    log = ["Rainy", "Covered", "Sunny"][weather] + " day\n"
+    log += "%i plants, total biomass %i." % (len(world.plants), sum(p.size for p in world.plants))
+    for plant in world.plants:
+        log += "\nG{}({:2}, {:2})".format(plant.size, plant.x, plant.y)
+        if bool(randint(0, 1)) is True:  # The plant isn't sick or infested
+            for i in range(weather):
+                plant.grow()
+            log += ["", "⇫", "⮸"][weather]
+        if plant.size == plant.max_size:  # Reproduction!
+            child_x, child_y = world.add_plant(plant)
+            log += "-> (%i, %i)" % (child_x, child_y)
+            plant.size = 0
+
+    return RuleOutput(False, log, None)
 
 
 def make_agents_act(world):

@@ -4,6 +4,7 @@ from typing import List
 
 from agents import Agent, Sniper
 from agents import Wanderer
+from agents.plant import Plant
 from model import Cells
 from model import Move
 from .grid import Grid
@@ -14,9 +15,11 @@ class World(object):
     An environment represented by a grid, where agents roam and rules apply.
     """
     agents = ...  # type: List[Agent]
+    plants = ...  # type: List[Plant]
 
     def __init__(self) -> None:
         self.agents = []
+        self.plants = []
         self.grid = Grid()
 
     @property
@@ -35,14 +38,16 @@ class World(object):
         self.grid = Grid(grid_width, abundance=grid_abundance)
 
         self.populate()
+        self.seed()
 
         return "Generated map of size %s/%s with %s resources and %s walls:\n\n%s" % (
             grid_width, grid_width, self.grid.stats.resources, self.grid.stats.walls, self.print_grid())
 
     def populate(self):
-        self.pop_gleaners(5)
-        self.pop_sniper()
+        # self.pop_gleaners(0)
+        # self.pop_sniper()
         # self.pop_bourgeoisie()
+        pass
 
     def pop_bourgeoisie(self):
         self.add_wealthy_wanderer()
@@ -53,6 +58,10 @@ class World(object):
     def pop_sniper(self, nb=1):
         for a in [Sniper()] * nb:
             self.add_agent(a)
+
+    def seed(self, nb_plants=10):
+        for i in range(nb_plants):
+            self.add_plant()
 
     def add_wealthy_wanderer(self, wealth=1000):
         wealthy = Wanderer()
@@ -71,26 +80,39 @@ class World(object):
         for a in agents:
             self.add_agent(a)
 
-    def add_agent(self, agent, position=None, near=None):
+    def add_agent(self, agent, near=None):
         """
-        Adds this agent at a random place on the map.
+        Adds this agent on the map, near another or randomly.
 
         :type near: Agent
         :type agent: Agent
-        :type position: tuple
         """
 
-        if near is not None:
-            x, y = self.valid_nearby((near.x, near.y))
-        elif position is not None:
-            x, y = position
-        else:
-            y = randrange(1, self.grid.size_y - 1)
-            x = randrange(1, self.grid.size_x - 1)
+        x, y = self.position_entity(near)
 
         self.put(agent, (x, y))
         self.agents.append(agent)
         return agent
+
+    def position_entity(self, near):
+        if near is not None:
+            x, y = self.valid_nearby((near.x, near.y))
+        else:
+            y = randrange(1, self.grid.size_y - 1)
+            x = randrange(1, self.grid.size_x - 1)
+        return x, y
+
+    def add_plant(self, near=None):
+        """
+        Adds a plant on the map, near another or randomly.
+        :type near: Plant
+        :rtype tuple(int, int)
+        """
+        x, y = self.position_entity(near)
+        plant = Plant(x=x, y=y)
+        self.plants.append(plant)
+
+        return x, y
 
     def move(self, agent, move):
         """
@@ -133,9 +155,10 @@ class World(object):
         :type position tuple
         :rtype tuple
         """
+        pos_x, pos_y = position
         x, y = position
 
-        while not self.grid.is_valid((x, y)):
+        while x == pos_x or y == pos_y or not self.grid.is_valid((x, y)):
             x = randint(x - 1, x + 1)
             y = randint(y - 1, y + 1)
         return x, y
@@ -195,6 +218,9 @@ class World(object):
                 cell_str = str(cell if show_resources else Cells(cell))
                 if cell_str == "0":
                     cell_str = " "
+                for plant in self.plants:
+                    if i == plant.y and j == plant.x:
+                        cell_str = str(plant)
                 for agent in self.alive_agents:
                     if i == agent.y and j == agent.x:
                         cell_str = agent.glyph

@@ -33,15 +33,15 @@ class Wanderer(Agent):
         min_distance = maxsize
 
         if len(resources):
-            Logger.get().info("%i res to analyze." % len(resources))
+            Logger.get().debug("%i res to analyze." % len(resources))
             for r_x, r_y, value in resources:
-                Logger.get().info("Current best target worth %i." % max_value)
+                Logger.get().debug("Current best target worth %i." % max_value)
                 if max_value <= value:  # Check all resources worth max_value
-                    Logger.get().info("new best resource: %i [%i,%i]" % (value, r_x, r_y))
+                    Logger.get().debug("new best resource: %i [%i,%i]" % (value, r_x, r_y))
                     max_value = value
                     distance = abs(self.x - r_x) + abs(self.y - r_y)
                     if distance < min_distance:  # Keep the closest max_value as target
-                        Logger.get().info("new target: %i [%i, %i] (%i)" % (value, r_x, r_y, distance))
+                        Logger.get().debug("new target: %i [%i, %i] (%i)" % (value, r_x, r_y, distance))
                         min_distance = distance
                         nearest = r_x, r_y
         return min_distance, nearest
