@@ -17,6 +17,7 @@ class Grid(object):
             self.size_y = size_y
 
         self.map = []
+        self.resources = []
         self.stats = GridStats(self)
 
         self.init_map(abundance)
@@ -31,6 +32,7 @@ class Grid(object):
             else:
                 lane = Grid.random_lane(self.size_x, abundance)
             self.map.append(lane)
+            self.resources.append([1 if x is Cells.FOOD.value else 0 for x in lane])
 
     # region Grid life
     def is_valid(self, position):
@@ -45,6 +47,19 @@ class Grid(object):
             0 < x < self.size_x - 1 and \
             0 < y < self.size_y - 1 and \
             self.map[y][x] is not Cells.WALL
+
+    def add_resource(self, x, y, value=1):
+        self.map[y][x] = Cells.FOOD
+        self.resources[y][x] = value
+        pass
+
+    def get_resource(self, x, y):
+        """ Returns the resources in this cell, leaving crumbs if some food was there."""
+        value = self.resources[y][x]
+        if value > 0:
+            self.map[y][x] = Cells.CRUMBS.value
+            self.resources[y][x] = 0
+        return value
 
     # endregion
 

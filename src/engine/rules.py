@@ -54,6 +54,7 @@ def make_agents_hungry(world):
             # Being hungry with an empty stomach doesn't help in this savage grid world
             if agent.resources <= 0:
                 agent.alive = False
+                world.grid.add_resource(agent.x, agent.y, agent.resources)
                 agent.resources = 0
     return RuleOutput()
 

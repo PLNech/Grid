@@ -48,7 +48,7 @@ class Agent(object):
         self.score += reward
 
     @abstractmethod
-    def choose_move(self, grid):
+    def choose_move(self, grid): #TODO: Don't see all grid
         return self.x, self.y
 
     def choose_to_reproduce(self):

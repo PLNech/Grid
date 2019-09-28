@@ -3,6 +3,10 @@ from model import Cells
 
 class GridStats(object):
     def __init__(self, grid):
+        """
+
+        :type grid: world.grid.Grid
+        """
         self.grid = grid
 
     def __getattr__(self, item):

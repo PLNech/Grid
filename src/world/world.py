@@ -191,11 +191,12 @@ class World(object):
         pass
 
     # TODO: More idiomatic repr with agents
-    def print_grid(self):
+    def print_grid(self, show_resources=False):
         grid_str = ""
-        for i, lane in enumerate(self.grid.map):
+        content = self.grid.resources if show_resources else self.grid.map
+        for i, lane in enumerate(content):
             for j, cell in enumerate(lane):
-                cell_str = str(Cells(cell))
+                cell_str = str(cell if show_resources else Cells(cell))
                 for agent in self.agents:
                     if i == agent.y and j == agent.x:
                         cell_str = agent.glyph
