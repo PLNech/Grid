@@ -13,11 +13,10 @@ class Grid(object):
     resources = ...  # type: List[List[int]]
 
     def __init__(self, size_x=10, size_y=None, abundance=.1):
+        self.size_x = size_x
         if size_y is None:
-            self.size_x, self.size_y = floor(size_x * 2), size_x
-        else:
-            self.size_x = size_x
-            self.size_y = size_y
+            size_y = floor(size_x * 2)
+        self.size_y = size_y
 
         self.map = []
         self.resources = []

@@ -44,5 +44,5 @@ if __name__ == "__main__":
                         metavar="10",
                         help="Pause between each round of actions.")
     args = parser.parse_args()
-    print(args.height)
+    print(args.height, args.width)
     wrapper(main)

@@ -36,7 +36,7 @@ class World(object):
 
         :return: the genesis info.
         """
-        self.grid = Grid(config.height, config.width, abundance=config.abundance)
+        self.grid = Grid(config.width, config.height, abundance=config.abundance)
 
         self.populate()
         self.seed(config.init_plants)
