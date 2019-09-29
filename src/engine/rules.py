@@ -32,22 +32,19 @@ def make_plants_grow(world):
     weather = randint(0, 2)  # Either rainy, covered or sunny
     log = ["Rainy", "Covered", "Sunny"][weather] + " day\n"
     log += "%i plants, total biomass %i." % (len(world.plants), sum(p.size for p in world.plants))
-    stats = {}
+
     for i, plant in enumerate(world.plants):
         Logger.get().error("P:%s" % plant.size)
-        # log += "\nG{}({:2}, {:2})".format(plant.size, plant.x, plant.y)
+
         if bool(randint(0, 1)) is True:  # The plant isn't sick or infested
             for i in range(weather):
                 plant.grow()
-            # log += ["", "⇫", "⮸"][weather]
-        if plant.size == plant.max_size:  # Reproduction!
-            stats["asd"] = 123
-            # child_x, child_y = \
-            world.add_plant(plant)
-            # log += "\n->(%i, %i)" % (child_x, child_y)
-            plant.size = 0
-    log += "\n%s" % sorted(Counter([p.size for p in world.plants]).items())
 
+        if plant.size == plant.max_size:  # Reproduction!
+            world.add_plant(plant)
+            plant.size = 0
+
+    log += "\n%s" % sorted(Counter([p.size for p in world.plants]).items())  # TODO Format stats
     return RuleOutput(False, log)
 
 

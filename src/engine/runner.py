@@ -67,13 +67,14 @@ class Runner(object):
         done = False
         show = ""
         log = ""
-        rules = [make_agents_hungry,
-                 make_agents_reproduce,
-                 make_agents_act,
-                 make_plants_grow,
-                 # make_last_alive_mohican,
-                 # done_if_nobody_alive
-                 ]
+        rules = [
+            make_agents_hungry,
+            make_agents_reproduce,
+            make_agents_act,
+            make_plants_grow,
+            # make_last_alive_mohican,
+            # done_if_nobody_alive
+        ]
 
         for rule in rules:
             output = rule(world)
