@@ -45,7 +45,7 @@ class World(object):
             config.height, config.width, self.grid.stats.resources, self.grid.stats.walls, self.print_grid())
 
     def populate(self):
-        # self.pop_gleaners(0)
+        self.pop_gleaners(2)
         # self.pop_sniper()
         # self.pop_bourgeoisie()
         pass
@@ -96,17 +96,26 @@ class World(object):
             self.agents.append(agent)
         return agent
 
-    def position_entity(self, near, no_agent=True, no_plant=False):
-        if near is not None:
-            x, y = self.valid_nearby((near.x, near.y))
-        else:
-            y = randrange(1, self.grid.size_y - 1)
-            x = randrange(1, self.grid.size_x - 1)
-        is_plant = len([p for p in self.plants if p.x == x and p.y == y]) > 0
-        is_agent = len([a for a in self.agents if a.x == x and a.y == y]) > 0
-        if no_plant and is_plant or no_agent and is_agent:
-            x, y = -1, -1
-        return x, y
+    def position_entity(self, near, no_agent=True, no_plant=False, tries=3):
+        x, y = -1, -1
+        for i in range(tries):
+            if near is not None:
+                x, y = self.valid_nearby((near.x, near.y))
+            else:
+                y = randrange(1, self.grid.size_y - 1)
+                x = randrange(1, self.grid.size_x - 1)
+            if no_plant and self.is_plant(x, y) or no_agent and self.is_agent(x, y):
+                x, y = -1, -1
+            return x, y
+
+    def is_occupied(self, x, y):
+        return self.is_agent(x, y), self.is_plant(x, y)
+
+    def is_plant(self, x, y):
+        return len([p for p in self.plants if p.x == x and p.y == y]) > 0
+
+    def is_agent(self, x, y):
+        return len([a for a in self.agents if a.x == x and a.y == y]) > 0
 
     def add_plant(self, near=None):
         """
@@ -222,17 +231,22 @@ class World(object):
     def print_grid(self, show_resources=False):
         grid_str = ""
         content = self.grid.resources if show_resources else self.grid.map
+
         for i, lane in enumerate(content):
             for j, cell in enumerate(lane):
-                cell_str = str(cell if show_resources else Cells(cell))
-                if cell_str == "0":
-                    cell_str = " "
+                cell_str = None
+
                 for plant in self.plants:
                     if i == plant.y and j == plant.x:
                         cell_str = str(plant)
                 for agent in self.alive_agents:
                     if i == agent.y and j == agent.x:
                         cell_str = agent.glyph
+                if cell_str is None:
+                    cell_str = str(cell if show_resources else Cells(cell))
+                if cell_str == "0":
+                    cell_str = " "
+
                 grid_str += cell_str
             grid_str += "\n"
         return grid_str
