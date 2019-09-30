@@ -45,7 +45,7 @@ class World(object):
             config.height, config.width, self.grid.stats.resources, self.grid.stats.walls, self.print_grid())
 
     def populate(self):
-        self.pop_gleaners(2)
+        # self.pop_gleaners(0)
         # self.pop_sniper()
         # self.pop_bourgeoisie()
         pass
@@ -96,17 +96,26 @@ class World(object):
             self.agents.append(agent)
         return agent
 
-    def position_entity(self, near, no_agent=True, no_plant=False, tries=3):
-        x, y = -1, -1
-        for i in range(tries):
-            if near is not None:
-                x, y = self.valid_nearby((near.x, near.y))
-            else:
-                y = randrange(1, self.grid.size_y - 1)
-                x = randrange(1, self.grid.size_x - 1)
-            if no_plant and self.is_plant(x, y) or no_agent and self.is_agent(x, y):
-                x, y = -1, -1
-            return x, y
+    def position_entity(self, near, no_agent=True, no_plant=False):
+        if near is not None:
+            neighbors = sorted([
+                (near.x, near.y + 1),  # Right
+                (near.x, near.y - 1),  # Left
+                (near.x + 1, near.y),  # Up
+                (near.x - 1, near.y)  # .Down
+            ])
+
+        for i in range(4):
+            x, y = neighbors[i] if near is not None else \
+                (randrange(1, self.grid.size_x - 1),
+                 randrange(1, self.grid.size_y - 1))
+
+            is_valid = self.grid.is_valid((x, y))
+            is_ok_plant = not (no_plant and self.is_plant(x, y))
+            is_ok_agent = not (no_agent and self.is_agent(x, y))
+            if is_valid and is_ok_plant and is_ok_agent:
+                return x, y
+        return -1, -1
 
     def is_occupied(self, x, y):
         return self.is_agent(x, y), self.is_plant(x, y)
@@ -159,27 +168,6 @@ class World(object):
             agent.x, agent.y = position
             return True
         return False
-
-    def valid_nearby(self, position):
-        """
-        Returns a walkable cell near the given position, or -1,-1 if none.
-
-        :param position: The desired position.
-
-        :type position tuple
-        :rtype tuple
-        """
-        pos_x, pos_y = position
-        x, y = pos_x, pos_y + 1  # Right
-        if not self.grid.is_valid((x, y)):
-            x, y = pos_x, pos_y - 1  # Left
-        if not self.grid.is_valid((x, y)):
-            x, y = pos_x + 1, pos_y  # Up
-        if not self.grid.is_valid((x, y)):
-            x, y = pos_x - 1, pos_y  # Down
-        if not self.grid.is_valid((x, y)):
-            x, y = -1, -1
-        return x, y
 
     def reward(self, agent):
         """
