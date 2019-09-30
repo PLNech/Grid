@@ -106,6 +106,8 @@ class World(object):
             ])
 
         for i in range(4):
+            # Currently if near=None, we try 4 random positions.
+            # TODO: replace random retries with free cell heuristic
             x, y = neighbors[i] if near is not None else \
                 (randrange(1, self.grid.size_x - 1),
                  randrange(1, self.grid.size_y - 1))

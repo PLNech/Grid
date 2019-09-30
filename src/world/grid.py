@@ -1,5 +1,6 @@
+import random
 from math import floor
-from random import randint
+from random import random
 from typing import List
 
 from info import GridStats
@@ -71,8 +72,7 @@ class Grid(object):
         lane = [Cells.WALL_H]
 
         for i in range(1, size - 1):
-            d100 = randint(1, 100)
-            if d100 < int(100 * abundance):
+            if random() < abundance:
                 cell = Cells.FOOD  # TODO: Replace with plants
             else:
                 cell = Cells.EMPTY
