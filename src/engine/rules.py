@@ -30,7 +30,7 @@ def make_plants_grow(world):
     :rtype tuple(bool, str, str)
     """
     weather = randint(0, 2)  # Either rainy, covered or sunny
-    log = ["Rainy", "Covered", "Sunny"][weather] + " day\n"
+    log = ["☔ Rain", "⛅ Clouds", "☀  Sunny"][weather] + "\n"
     log += "%i plants, total biomass %i." % (len(world.plants), sum(p.size for p in world.plants))
 
     for i, plant in enumerate(world.plants):
