@@ -38,17 +38,20 @@ class World(object):
         """
         self.grid = Grid(config.width, config.height, abundance=config.abundance)
 
-        self.populate()
+        self.populate(config.scenario)
         self.seed(config.init_plants)
 
         return "Generated map of size %s/%s with %s resources and %s walls:\n\n%s" % (
             config.height, config.width, self.grid.stats.resources, self.grid.stats.walls, self.print_grid())
 
-    def populate(self):
-        # self.pop_gleaners(0)
-        # self.pop_sniper()
-        # self.pop_bourgeoisie()
-        pass
+    def populate(self, scenario=0):
+        if scenario == 0:  # No agents
+            return
+        elif scenario == 1:  # Classic team
+            self.pop_gleaners(5)
+            self.pop_sniper()
+        elif scenario == 2:  # Let's reproduce
+            self.pop_bourgeoisie()
 
     def pop_bourgeoisie(self):
         self.add_wealthy_wanderer()

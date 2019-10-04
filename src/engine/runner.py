@@ -10,13 +10,15 @@ class RunnerConfig(object):
                  height=20,
                  width=None,
                  abundance=.1, init_plants=1,
-                 timeout_pauses=5000, timeout_run=0) -> None:
+                 timeout_pauses=5000, timeout_run=0,
+                 scenario=0) -> None:
         self.abundance = abundance
         self.height = height
         self.width = width
         self.init_plants = init_plants
         self.timeout_run = timeout_run
         self.timeout_pauses = timeout_pauses
+        self.scenario = scenario
 
 
 class Runner(object):

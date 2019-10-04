@@ -18,7 +18,8 @@ def main(stdscr):
                           args.abundance,
                           args.plants,
                           args.pause,
-                          args.timeout)  # type: RunnerConfig
+                          args.timeout,
+                          args.scenario)  # type: RunnerConfig
     runner = Runner(stdscr, config)
     runner.run_infinite()
 
@@ -43,6 +44,9 @@ if __name__ == "__main__":
     parser.add_argument("-t", "--timeout", type=int, default=default_timeout,
                         metavar="10",
                         help="Pause between each round of actions.")
+    parser.add_argument("-s", "--scenario", type=int, default=0,
+                        metavar="0",
+                        help="Choose a scenario.")
     args = parser.parse_args()
     print(args.height, args.width)
     wrapper(main)
