@@ -39,6 +39,7 @@ def make_plants_grow(world):
         if bool(randint(0, 1)) is True:  # The plant isn't sick or infested
             for i in range(weather):
                 plant.grow()
+                world.grid.update_resource(plant.x, plant.y, plant.size)
 
         if plant.size == plant.max_size:  # Reproduction!
             world.add_plant(plant)

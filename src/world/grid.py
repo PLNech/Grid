@@ -66,6 +66,12 @@ class Grid(object):
             self.resources[y][x] = 0
         return value
 
+    def update_resource(self, x, y, value=0):
+        """
+        Updates the value of the given resource.
+        """
+        self.resources[y][x] = value
+
     # endregion
 
     # region Map generation
