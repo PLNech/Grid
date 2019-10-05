@@ -70,10 +70,10 @@ class Runner(object):
         show = ""
         log = ""
         rules = [
+            make_plants_grow,
             make_agents_hungry,
             make_agents_reproduce,
             make_agents_act,
-            make_plants_grow,
             # make_last_alive_mohican,
             # done_if_nobody_alive
         ]
