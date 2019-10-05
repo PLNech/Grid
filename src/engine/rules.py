@@ -36,8 +36,16 @@ def make_plants_grow(world):
     for i, plant in enumerate(world.plants):
         Logger.get().error("P:%s" % plant.size)
 
-        if weather == 0 and plant.size == 1: # Shoots don't stand rain
-            world.plants.remove(plant)
+        if weather == 0:
+            if plant.size == 1:  # Shoots don't stand rain
+                world.plants.remove(plant)
+            else:
+                plant.dry = False
+        elif weather == 2:
+            if plant.dry and plant.size > 2:  # Dry plants with huge leaves don't stand the sun
+                world.plants.remove(plant)
+            else:
+                plant.dry = True
 
         if bool(randint(0, 1)) is True:  # The plant isn't sick or infested
             for i in range(weather):

@@ -6,6 +6,7 @@ class Plant(object):
     def __init__(self, max_size=5, x=-1, y=-1):
         self.max_size = max_size
         self.size = 0
+        self.dry = False
         self.x, self.y = x, y
 
     def grow(self):
