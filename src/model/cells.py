@@ -6,7 +6,7 @@ class Cells(Enum):
     WALL = 0
     EMPTY = 1
     FOOD = 2
-    PLAYER = 3
+    AGENT = 3
     CRUMBS = 4
 
     def __str__(self):

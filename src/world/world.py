@@ -102,13 +102,28 @@ class World(object):
         return agent
 
     def position_entity(self, near, no_agent=True, no_plant=False):
+        """
+        Positions an entity on the grid.
+
+        :param near: If specified, position around that cell.
+        :param no_agent: If true, positions with an agent are invalid.
+        :param no_plant: If true, positions with a plant are invalid.
+        :return: a valid position or -1, -1.
+        """
         if near is not None:
-            neighbors = sorted([
+            neighbors = [
                 (near.x, near.y + 1),  # Right
                 (near.x, near.y - 1),  # Left
                 (near.x + 1, near.y),  # Up
                 (near.x - 1, near.y)  # .Down
-            ])
+            ]
+        # else:
+        #     neighbors = [
+        #         (near.x, near.y + 1),  # Right
+        #         (near.x, near.y - 1),  # Left
+        #         (near.x + 1, near.y),  # Up
+        #         (near.x - 1, near.y)  # .Down
+        #     ]
 
         for i in range(4):
             # Currently if near=None, we try 4 random positions.
@@ -144,6 +159,13 @@ class World(object):
             plant = Plant(x=x, y=y)
             self.plants.append(plant)
 
+    def remove_plant(self, x, y):
+        try:
+            plant = next(p for p in self.plants if p.x == x and p.y == y)
+            self.plants.remove(plant)
+        except StopIteration:
+            pass
+
     def move(self, agent, move):
         """
         Tries to move the agent.
@@ -178,7 +200,7 @@ class World(object):
 
     def reward(self, agent):
         """
-        Rewards the agent.
+        Rewards the agent, removing any plant it ate.
 
         :return: the computed reward.
 
@@ -188,7 +210,10 @@ class World(object):
 
         x, y = agent.x, agent.y
         reward = self.grid.get_resource(x, y)
-        info = "none" if reward is 0 else "food"
+        info = "none"
+        if reward is not 0:
+            info = "food"
+            self.remove_plant(x, y)
         return reward, info
 
     def act(self, agent):
