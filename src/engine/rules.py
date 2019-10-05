@@ -42,7 +42,7 @@ def make_plants_grow(world):
             else:
                 plant.dry = False
         elif weather == 2:
-            if plant.dry and plant.size > 2:  # Dry plants with huge leaves don't stand the sun
+            if plant.dry and plant.size > 3:  # Dry plants with huge leaves don't stand the sun
                 world.plants.remove(plant)
             else:
                 plant.dry = True
@@ -56,7 +56,7 @@ def make_plants_grow(world):
             world.add_plant(plant)
             plant.size = 0
 
-    log += "\n%s" % sorted(Counter([p.size for p in world.plants]).items())  # TODO Format stats
+    # log += "\n%s" % sorted(Counter([p.size for p in world.plants]).items())  # TODO Format stats
     return RuleOutput(False, log)
 
 
