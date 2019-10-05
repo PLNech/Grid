@@ -43,7 +43,7 @@ class Runner(object):
             format_score = "{:" + str(max([len(str(a.score)) for a in world.agents])) + "}"
             format_fails = "{:" + str(max([len(str(a.fails)) for a in world.agents])) + "}"
 
-        world.agents.sort(key=lambda a: a.resources)
+        world.agents.sort(key=lambda a: a.score, reverse=True)
         for agent in world.agents:
             info_score = format_score.format(agent.score)
             info_fails = format_fails.format(agent.fails)
