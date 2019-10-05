@@ -150,14 +150,14 @@ def make_last_alive_mohican(world):
     return RuleOutput(show=show, log=log)
 
 
-def done_if_nobody_alive(world):
+def done_if_nothing_alive(world):
     """
-    The world stops if nobody is alive.
+    The world stops if nothing is alive.
 
     :type world: World
     :rtype: RuleOutput
     """
-    return RuleOutput(len(world.alive_agents) == 0)
+    return RuleOutput(len(world.alive_agents) == 0 and len(world.plants) == 0)
 
 
 def done_if_no_resources(world):

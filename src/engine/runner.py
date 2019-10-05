@@ -75,7 +75,7 @@ class Runner(object):
             make_agents_reproduce,
             make_agents_act,
             # make_last_alive_mohican,
-            # done_if_nobody_alive
+            done_if_nothing_alive
         ]
 
         for rule in rules:
