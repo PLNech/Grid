@@ -13,7 +13,7 @@ class Grid(object):
     """
     resources = ...  # type: List[List[int]]
 
-    def __init__(self, size_x=None, size_y=None, abundance=.1):
+    def __init__(self, size_x=None, size_y=None, abundance=.0):
         if size_x is None:
             size_x = 20
         self.size_x = size_x
@@ -80,7 +80,7 @@ class Grid(object):
         lane = [Cells.WALL_H]
 
         for i in range(1, size - 1):
-            if random() < abundance:
+            if abundance > 0 and random() < abundance:
                 cell = Cells.FOOD  # TODO: Replace with plants
             else:
                 cell = Cells.EMPTY

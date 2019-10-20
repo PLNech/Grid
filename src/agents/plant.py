@@ -15,6 +15,15 @@ class Plant(object):
 
     def __str__(self) -> str:
         return [
+            "·",
+            "𔗉",
+            "𔒱",
+            "𔓘",
+            "𔒰",
+        ][self.size]
+
+    def __repr__(self) -> str:
+        return [
             "՛",
             "՜",
             "՞",
@@ -24,4 +33,5 @@ class Plant(object):
             "թ",
             "Ք",
             "ք",
-            "Ց"][self.size]
+            "Ց"
+        ][self.size]

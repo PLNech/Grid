@@ -14,6 +14,6 @@ class Cells(Enum):
             self.WALL_H: "|",
             self.WALL: "-",
             self.EMPTY: " ",
-            self.FOOD: "⋄",
-            self.CRUMBS: "·",
+            self.FOOD: "𔓐",
+            self.CRUMBS: "⸰",
         }[self]

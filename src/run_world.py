@@ -4,7 +4,7 @@ from curses import wrapper
 
 from engine import Runner, RunnerConfig
 
-default_abundance = .05
+default_abundance = .0
 default_grid_height = 10
 default_grid_width = None
 default_pauses = 1000
@@ -47,6 +47,9 @@ if __name__ == "__main__":
     parser.add_argument("-s", "--scenario", type=int, default=0,
                         metavar="0",
                         help="Choose a scenario.")
+    parser.add_argument("-g", "--graphical", nargs='?',
+                        const=True, default=False,
+                        help="When true, use unicode graphics.")
     args = parser.parse_args()
     print(args.height, args.width)
     wrapper(main)

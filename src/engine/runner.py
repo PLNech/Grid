@@ -19,6 +19,7 @@ class RunnerConfig(object):
         self.timeout_run = timeout_run
         self.timeout_pauses = timeout_pauses
         self.scenario = scenario
+        self.graphical = False
 
 
 class Runner(object):
@@ -96,7 +97,7 @@ class Runner(object):
         return done
 
     def init_world(self):
-        world = World()
+        world = World(self.config.graphical)
         info = world.generate(self.config)
 
         self.log.print(info)

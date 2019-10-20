@@ -18,10 +18,11 @@ class World(object):
     agents = ...  # type: List[Agent]
     plants = ...  # type: List[Plant]
 
-    def __init__(self) -> None:
+    def __init__(self, graphical=False) -> None:
         self.agents = []
         self.plants = []
         self.grid = Grid()
+        self.graphical = True
 
     @property
     def alive_agents(self):
@@ -54,6 +55,7 @@ class World(object):
             self.pop_sniper()
         elif scenario == 3:  # Let's reproduce
             self.pop_bourgeoisie()
+            self.pop_gleaners(1)
 
     def pop_bourgeoisie(self):
         self.add_wealthy_wanderer()
@@ -62,7 +64,7 @@ class World(object):
         self.add_wanderers(self.grid.size_x, nb)
 
     def pop_sniper(self, nb=1):
-        for a in [Sniper()] * nb:
+        for a in [Sniper("𔐙" if self.graphical else None)] * nb:
             self.add_agent(a)
 
     def seed(self, nb_plants=1):
@@ -71,17 +73,14 @@ class World(object):
         Logger.get().error("%i plants added." % len(self.plants))
 
     def add_wealthy_wanderer(self, wealth=1000):
-        wealthy = Wanderer()
+        wealthy = Wanderer("𔐋" if self.graphical else None)
         wealthy.resources = wealth
         self.add_agent(wealthy)
 
     def add_wanderers(self, grid_width, nb=5):
-        for (i, x) in enumerate(string.ascii_uppercase, 1):
-            agent = Wanderer(x, int(i * grid_width / 10))
-
-            self.add_agent(agent)
-            if i == nb:
-                return
+        names = list("𔐅𔐆𔐇𔐉𔐏" if self.graphical else string.ascii_uppercase)[:nb]
+        for i, n in enumerate(names):
+            self.add_agent(Wanderer(n, int(i * grid_width / 10)))
 
     def add_agents(self, agents: list):
         for a in agents:
@@ -258,7 +257,7 @@ class World(object):
 
                 for plant in self.plants:
                     if i == plant.y and j == plant.x:
-                        cell_str = str(plant)
+                        cell_str = repr(plant) if self.graphical else str(plant)
                 for agent in self.alive_agents:
                     if i == agent.y and j == agent.x:
                         cell_str = agent.glyph
