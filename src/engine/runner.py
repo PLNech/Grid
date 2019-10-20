@@ -9,7 +9,7 @@ class RunnerConfig(object):
     def __init__(self,
                  height=20,
                  width=None,
-                 abundance=.1, init_plants=1,
+                 abundance=.0, init_plants=1,
                  timeout_pauses=5000, timeout_run=0,
                  scenario=0) -> None:
         self.abundance = abundance

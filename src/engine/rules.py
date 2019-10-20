@@ -99,7 +99,10 @@ def make_agents_hungry(world):
             # Being hungry with an empty stomach doesn't help in this savage grid world
             if agent.resources <= 0:
                 agent.alive = False
+
+                # Compost: agent leaves resources, flowers grow
                 world.grid.add_resource(agent.x, agent.y, VALUE_AGENT_COMPOST)
+                world.add_plants(near=agent)
                 agent.resources = 0
     return RuleOutput()
 

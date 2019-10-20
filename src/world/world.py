@@ -147,6 +147,10 @@ class World(object):
     def is_agent(self, x, y):
         return len([a for a in self.agents if a.x == x and a.y == y]) > 0
 
+    def add_plants(self, nb=2, near=None):
+        for i in range(nb):
+            self.add_plant(near)
+
     def add_plant(self, near=None):
         """
         Adds a plant on the map, near another or randomly.
