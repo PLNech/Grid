@@ -1,5 +1,4 @@
 import copy
-from collections import Counter
 from math import floor
 from random import randint
 
@@ -19,6 +18,8 @@ class RuleOutput(object):
         self.show = show
         self.log = log
 
+
+# TODO: Indigestion - mort ou lenteur aux bourgeois obèses
 
 def make_plants_grow(world):
     """
@@ -48,8 +49,8 @@ def make_plants_grow(world):
                 plant.dry = True
 
         if bool(randint(0, 1)) is True:  # The plant isn't sick or infested
-            for i in range(weather):
-                plant.grow()
+            if weather > 1:  # Sunshine makes a plant grow
+                plant.grow(weather)
                 world.grid.update_resource(plant.x, plant.y, plant.size)
 
         if plant.size == plant.max_size:  # Reproduction!

@@ -9,9 +9,9 @@ class Plant(object):
         self.dry = False
         self.x, self.y = x, y
 
-    def grow(self):
+    def grow(self, weather):
         if self.size < self.max_size:
-            self.size += 1
+            self.size += weather
 
     def __str__(self) -> str:
         return [
