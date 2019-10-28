@@ -4,7 +4,7 @@ from random import randint
 
 from agents import Agent
 from engine.namer import namer
-from info import Logger
+from info import Logger, MoveLog
 from model import Move
 
 VALUE_AGENT_COMPOST = 10
@@ -124,8 +124,12 @@ def make_agents_reproduce(world):
 
 
 def can_reproduce(agent):
-    return agent.age > 100 \
-           and agent.last_birth == 0 or agent.last_birth >= 100
+    child_cost = 15
+    adult_age = 100
+    time_to_recover = 20
+    no_child = agent.last_birth == 0
+
+    return agent.resources > child_cost and agent.age > adult_age and no_child or agent.last_birth >= time_to_recover
 
 
 def create_child(agent):
@@ -138,6 +142,8 @@ def create_child(agent):
     clone = copy.copy(agent)  # type: Agent
     clone.resources = floor(agent.resources / 2)
     agent.resources = clone.resources
+    clone.move_log = MoveLog()
+    clone.age = 0
     clone.glyph, clone.name = namer.name_child(agent.name)
     return clone
 
