@@ -30,30 +30,31 @@ def make_plants_grow(world):
 
     :rtype tuple(bool, str, str)
     """
-    weather = randint(0, 2)  # Either rainy, covered or sunny
-    log = ["☔ Rain", "⛅ Clouds", "☀  Sunny"][weather] + "\n"
+    weather = randint(0, 3)  # Either stormy, rainy, covered or sunny
+    log = ["🌩 Storm", "☔ Rain", "⛅ Clouds", "☀  Sunny"][weather] + "\n"
     log += "%i plants, total biomass %i." % (len(world.plants), sum(p.size for p in world.plants))
 
     for i, plant in enumerate(world.plants):
         Logger.get().error("P:%s" % plant.size)
 
-        if weather == 0:
-            if plant.size == 1:  # Shoots don't stand rain
+        if weather == 0:  # Storm!
+            if plant.size == 1:  # Shoots don't stand storm
                 world.plants.remove(plant)
-            else:
-                plant.dry = False
-        elif weather == 2:
+        if weather > 2:  # Rain
+            plant.dry = False
+        elif weather == 3:
             if plant.dry and plant.size > 3:  # Dry plants with huge leaves don't stand the sun
                 world.plants.remove(plant)
             else:
                 plant.dry = True
 
         if bool(randint(0, 1)) is True:  # The plant isn't sick or infested
-            if weather > 1:  # Sunshine makes a plant grow
-                plant.grow(weather)
+            if weather == 3:  # Sunshine makes a plant grow
+                plant.grow()
                 world.grid.update_resource(plant.x, plant.y, plant.size)
 
-        if plant.size == plant.max_size:  # Reproduction!
+        if plant.size >= plant.max_size:  # Reproduction!
+            world.add_plant(plant)
             world.add_plant(plant)
             plant.size = 0
 
