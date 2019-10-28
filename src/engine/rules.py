@@ -49,8 +49,8 @@ def make_plants_grow(world):
                 plant.dry = True
 
         if bool(randint(0, 1)) is True:  # The plant isn't sick or infested
-            if weather == 3:  # Sunshine makes a plant grow
-                plant.grow()
+            if weather >= 2:  # Sunshine makes a plant grow
+                plant.grow(weather)
                 world.grid.update_resource(plant.x, plant.y, plant.size)
 
         if plant.size >= plant.max_size:  # Reproduction!
