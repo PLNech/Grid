@@ -87,7 +87,7 @@ def make_agents_act(world):
     return RuleOutput(show=show, log=log)
 
 
-def make_agents_hungry(world):
+def make_agents_hungry_and_old(world):
     """
     Agents are hungry, losing resources at a random yet regular rate.
 
@@ -95,6 +95,7 @@ def make_agents_hungry(world):
     :rtype: RuleOutput
     """
     for agent in world.alive_agents:  # type: Agent
+        agent.age += 1
         # Hungry because the agent just moved, else once in a while
         if len(agent.move_log) and agent.move_log[-1] is Move.NONE or randint(1, 10) == 1:
             agent.resources -= 1
@@ -117,10 +118,14 @@ def make_agents_reproduce(world):
     :rtype: RuleOutput
     """
     for agent in world.alive_agents:  # type: Agent
-        if agent.resources > 20:
-            if agent.choose_to_reproduce():
-                world.add_agent(create_child(agent), near=agent)
+        if can_reproduce(agent) and agent.choose_to_reproduce():
+            world.add_agent(create_child(agent), near=agent)
     return RuleOutput()
+
+
+def can_reproduce(agent):
+    return agent.age > 100 \
+           and agent.last_birth == 0 or agent.last_birth >= 100
 
 
 def create_child(agent):
@@ -129,6 +134,7 @@ def create_child(agent):
     :type agent: Agent
     :rtype Agent
     """
+    agent.last_birth = 0
     clone = copy.copy(agent)  # type: Agent
     clone.resources = floor(agent.resources / 2)
     agent.resources = clone.resources

@@ -29,6 +29,8 @@ class Agent(object):
         self.move_log = MoveLog()
         self.resources = 10
         self.score = 0
+        self.age = 0
+        self.last_birth = 0
 
     @property
     def fails(self):

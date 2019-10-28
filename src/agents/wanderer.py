@@ -1,8 +1,10 @@
+from random import randint
 from sys import maxsize
 from typing import List, Tuple
 
 from agents import Agent
 from info import Logger
+from model import Move
 
 
 class Wanderer(Agent):
@@ -18,14 +20,16 @@ class Wanderer(Agent):
 
     def choose_move(self, grid):
         self.view = grid.map
-        resources, spot_info = self.spot_resources(grid)
 
+        # Overweight: being fat makes it hard to move
+        if self.resources > 15 and randint(1, 10) < 10:
+            return Move.NONE
+
+        resources, spot_info = self.spot_resources(grid)
         min_distance, nearest = self.analyze_resources(resources)
-        if nearest[0] == -1:
-            move = self._random_move()
-        else:
-            move = self.move_towards(nearest)
-        return move
+
+        return self.move_towards(nearest) if nearest[0] != -1 \
+            else self._random_move()
 
     def analyze_resources(self, resources):
         nearest = -1, -1

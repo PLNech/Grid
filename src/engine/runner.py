@@ -72,7 +72,7 @@ class Runner(object):
         log = ""
         rules = [
             make_plants_grow,
-            make_agents_hungry,
+            make_agents_hungry_and_old,
             make_agents_reproduce,
             make_agents_act,
             # make_last_alive_mohican,
