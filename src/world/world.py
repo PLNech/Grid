@@ -4,6 +4,7 @@ from typing import List
 
 from agents import Agent, Sniper
 from agents import Wanderer
+from agents import Lazy
 from agents.plant import Plant
 from info import Logger
 from model import Cells
@@ -55,6 +56,9 @@ class World(object):
             self.pop_sniper()
         elif scenario == 3:  # Let's reproduce
             self.pop_bourgeoisie()
+            self.pop_gleaners(1)
+        elif scenario == 4:  # Lazy fish
+            self.add_agent(Lazy())
             self.pop_gleaners(1)
 
     def pop_bourgeoisie(self):
