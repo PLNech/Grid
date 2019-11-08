@@ -59,6 +59,8 @@ class World(object):
             self.pop_gleaners(1)
         elif scenario == 4:  # Lazy fish
             self.add_agent(Lazy())
+        elif scenario == 5:  # Lazy fish
+            self.add_agent(Lazy())
             self.pop_gleaners(1)
 
     def pop_bourgeoisie(self):
