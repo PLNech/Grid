@@ -1,7 +1,7 @@
 # Grid
 A GridWorld where agents thrive and survive.
 
-[![Demo](./demo.gif)](https://asciinema.org/a/bgVamqfTqLoTPHBGnaWM7xgm5)
+[![Demo](./docs/demo.gif)](https://asciinema.org/a/bgVamqfTqLoTPHBGnaWM7xgm5)
 
 ## Setup
 
